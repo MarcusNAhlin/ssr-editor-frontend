@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+$primary: #4A6A8A;
+
+$bg-primary: #2D2D2D;
+$bg-secondary: #1F2A44;
+$bg-elevated: #3F3F3F;
+
+$text-primary: #D1D5DB;
+$text-secondary: #9CA3AF;
+$text-disabled: #6B7280;
+
+$highlight: #EEDD38;
+
+$border: #374151;
+
+$success: #10B981;
+$warning: #F59E0B;
+$error: #EF4444;
+$info: #3B82F6;
+
+:root {
+  background-color: $bg-primary;
+}

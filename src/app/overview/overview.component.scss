@@ -1,0 +1,9 @@
+@use '../../styles.scss' as *;
+
+h2 {
+  color: $text-primary;
+}
+
+.add-button {
+  color: $highlight;
+}
