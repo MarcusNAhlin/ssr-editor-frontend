@@ -25,15 +25,17 @@ export class OverviewComponent implements OnInit {
 
   title = '';
   loading = false;
-  failure = false;
+  error?: string;
 
   ngOnInit(): void {
+    this.loading = true;
     this.getDocuments();
+    this.loading = false;
   }
 
   onSubmit() {
     this.loading = true;
-    this.failure = false;
+    this.error = '';
 
     this.api.addDocument({
       title: this.title,
@@ -49,7 +51,7 @@ export class OverviewComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.failure = true;
+        this.error = 'Failed to add new document';
         this.loading = false;
 
         console.error('Failed to add document:', err);
