@@ -35,6 +35,12 @@ export class ApiService {
     );;
   }
 
+  editDocument(documentData: Document): Observable<Document> {
+    return this.http.put<Document>(this.apiURL + '/docs/update', documentData).pipe(
+      catchError(this.handleError)
+    );;
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.

@@ -3,7 +3,7 @@
 <div *ngIf="!loading">
   <p class="error" *ngIf="error">{{ error }}</p>
 
-  <form *ngIf="document">
+  <form *ngIf="document" form #f="ngForm" (ngSubmit)="saveDocument()">
     <label>
       Title
       <input [(ngModel)]="document.title" name="title" placeholder="Document title" />
@@ -14,5 +14,6 @@
       <textarea [(ngModel)]="document.content" name="content" rows="14" placeholder="Start typing…"></textarea>
     </label>
 
+    <button [disabled]="loading">Save</button>
   </form>
 </div>

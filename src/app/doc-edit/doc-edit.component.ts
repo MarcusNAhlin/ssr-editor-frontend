@@ -22,8 +22,9 @@ export class DocEditComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
   document?: Document;
+
   loading = true;
-  // saving = false;
+  saving = false;
   error?: string;
 
   ngOnInit(): void {
@@ -43,8 +44,37 @@ export class DocEditComponent implements OnInit {
     });
   }
 
-  save(): void{
-    // Code for saving doc
-  }
+  saveDocument() {
+    this.loading = true;
+    this.saving = true;
+    this.error = '';
 
+    if (!this.document?.title || !this.document.content) {
+      this.loading = false;
+      this.saving = false;
+      this.error = 'Missing title or content';
+
+      return;
+    }
+
+    this.api.editDocument({
+      _id: this.document?._id,
+      title: this.document?.title,
+      content: this.document?.content,
+    }).subscribe({
+      next: (data: Document) => {
+        console.log('Successfully edited document:', data);
+
+        this.loading = false;
+        this.saving = false;
+      },
+      error: (err) => {
+        this.error = 'Failed to edit document';
+        this.loading = false;
+        this.saving = false;
+
+        console.error('Failed to edit document:', err);
+      }
+    });
+  }
 }
