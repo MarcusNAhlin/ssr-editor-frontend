@@ -5,7 +5,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 
 interface Document {
-  _id: string,
+  _id?: string,
   title: string,
   content: string,
 }
@@ -29,8 +29,8 @@ export class ApiService {
     );;
   }
 
-  addDocument(documentData: document): Observable<document> {
-    return this.http.post<document>(this.apiURL + '/docs/add', documentData).pipe(
+  addDocument(documentData: Document): Observable<Document> {
+    return this.http.post<Document>(this.apiURL + '/docs/add', documentData).pipe(
       catchError(this.handleError)
     );;
   }

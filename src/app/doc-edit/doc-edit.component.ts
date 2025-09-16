@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 interface Document {
-  _id: string;
+  _id?: string;
   title: string;
   content: string;
 }
