@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 
-interface document {
-  _id: string,
+interface Document {
+  _id?: string,
   title: string,
   content: string,
 }
@@ -17,8 +17,20 @@ export class ApiService {
   private apiURL = environment.API_URL;
   private http = inject(HttpClient);
 
-  getDocuments(): Observable<document[]> {
-    return this.http.get<document[]>(this.apiURL + '/docs').pipe(
+  getDocuments(): Observable<Document[]> {
+    return this.http.get<Document[]>(this.apiURL + '/docs').pipe(
+      catchError(this.handleError)
+    );;
+  }
+
+  getDocument(_id: string): Observable<Document> {
+    return this.http.get<Document>(this.apiURL + `/docs/${_id}`).pipe(
+      catchError(this.handleError)
+    );;
+  }
+
+  addDocument(documentData: Document): Observable<Document> {
+    return this.http.post<Document>(this.apiURL + '/docs/add', documentData).pipe(
       catchError(this.handleError)
     );;
   }

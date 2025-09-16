@@ -1,6 +1,11 @@
 <main>
   <h2>Documents</h2>
 
+  <form #f="ngForm" (ngSubmit)="onSubmit()">
+    <input name="title" [(ngModel)]="title" required minlength="1" #c="ngModel">
+    <button [disabled]="f.invalid || loading">Add Document</button>
+  </form>
+
   <div class="document-holder">
     <div *ngFor="let document of documents" class="document">
       <h3>{{ document.title || 'ID: ' + document._id }}</h3>
