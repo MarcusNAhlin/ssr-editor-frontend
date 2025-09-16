@@ -45,7 +45,7 @@ export class OverviewComponent implements OnInit {
 
         console.log('Successfully added document:', data);
 
-        this.router.navigate([`/docs/${data._id}`]);
+        this.router.navigate([`/doc/${data._id}`]);
         this.loading = false;
       },
       error: (err) => {
