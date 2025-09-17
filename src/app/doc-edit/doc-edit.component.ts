@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 interface Document {
@@ -20,6 +20,7 @@ interface Document {
 export class DocEditComponent implements OnInit {
   private api = inject(ApiService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   document?: Document;
 
@@ -76,5 +77,40 @@ export class DocEditComponent implements OnInit {
         console.error('Failed to edit document:', err);
       }
     });
+  }
+
+  deleteDocument() {
+    this.loading = true;
+    const documentIdentifier = (this.document?.title || this.document?._id);
+
+    // Show browser confirm modal
+    const confirmedDelete = confirm(`Are you sure you want to delete document "${documentIdentifier}"`);
+
+    if (confirmedDelete) {
+      if (!this.document?._id) {
+        this.loading = false;
+        this.error = 'Missing document id';
+
+        console.error('Missing document id for document: ', this.document);
+      }
+
+      this.api.deleteDocument(this.document!._id).subscribe({
+        next: (data: Document) => {
+          console.log('Successfully deleted document:', data);
+
+          this.loading = false;
+        },
+        error: (err) => {
+          this.error = 'Failed to delete document';
+          this.loading = false;
+
+          console.error('Failed to delete document:', err);
+        }
+      });
+
+      alert(`Document "${documentIdentifier}" deleted successfully`);
+
+      this.router.navigate(['/']);
+    }
   }
 }

@@ -1,7 +1,10 @@
 <div *ngIf="loading">Loading…</div>
 
+
 <div *ngIf="!loading">
   <p class="error" *ngIf="error">{{ error }}</p>
+
+  <button (click)="deleteDocument()">Delete Document</button>
 
   <form *ngIf="document" form #f="ngForm" (ngSubmit)="saveDocument()">
     <label>
