@@ -1,3 +1,3 @@
 export const environment = {
-  API_URL: 'http://localhost:3000'
+  API_URL: 'https://angular-avengers-backend-eydthshkg0f6gkem.northeurope-01.azurewebsites.net'
 };
