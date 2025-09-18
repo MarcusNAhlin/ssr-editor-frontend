@@ -1,6 +1,47 @@
 @use '../../../styles.scss' as *;
 
-.nav-title a {
-  text-decoration: none;
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $bg-elevated;
   color: $text-primary;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid $border;
+
+  .left {
+    display: flex;
+    align-items: center;
+
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: $highlight;  
+    }
+
+    nav {
+      margin-left: 1.5rem;
+
+      a {
+        color: $text-secondary;
+        margin-right: 1rem;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+    }
+  }
+
+  .right {
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: $primary;
+      color: $text-primary;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid $border;
+    }
+  }
 }

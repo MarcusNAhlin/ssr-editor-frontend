@@ -1,0 +1,31 @@
+@use '../../../styles.scss' as *;
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $bg-elevated;
+  color: $text-secondary;
+  padding: 1rem;
+  border-top: 1px solid $border;
+  font-size: 0.875rem;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+
+  p {
+    margin: 0;
+    color: $text-disabled;
+  }
+
+  nav a {
+    margin-left: 1rem;
+    text-decoration: none;
+    color: $text-secondary;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $highlight;
+    }
+  }
+}
