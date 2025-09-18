@@ -1,7 +1,7 @@
 <div *ngIf="loading">Loading…</div>
 
 
-<div *ngIf="!loading">
+<div *ngIf="!loading" class="edit-holder">
   <p class="error" *ngIf="error">{{ error }}</p>
 
   <button (click)="deleteDocument()">Delete Document</button>
