@@ -1,8 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DocumentCardComponent } from '../../components/document-card/document-card.component';
 
 interface Document {
   _id?: string;
@@ -12,7 +13,7 @@ interface Document {
 
 @Component({
   selector: 'app-overview',
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, FormsModule, DocumentCardComponent],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
