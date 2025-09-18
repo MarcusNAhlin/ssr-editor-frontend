@@ -9,8 +9,6 @@
   <div class="document-holder">
     <div *ngFor="let document of documents" class="document">
       <app-document-card [document]="document" />
-      <!-- <h3>{{ document.title || 'ID: ' + document._id }}</h3>
-      <a routerLink="/doc/{{ document._id }}">View</a> -->
     </div>
   </div>
 </main>
