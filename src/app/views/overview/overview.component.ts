@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DocumentCardComponent } from '../../components/document-card/document-card.component';
+import { DocumentAddFormComponent } from '../../components/document-add-form/document-add-form.component';
+import { ApiService } from '../../services/api.service';
 
 interface Document {
   _id?: string;
@@ -13,12 +13,11 @@ interface Document {
 
 @Component({
   selector: 'app-overview',
-  imports: [CommonModule, FormsModule, DocumentCardComponent],
+  imports: [CommonModule, FormsModule, DocumentCardComponent, DocumentAddFormComponent],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
 export class OverviewComponent implements OnInit {
-  private router = inject(Router);
   private api = inject(ApiService);
 
   documents: Document[] = [];
@@ -29,42 +28,32 @@ export class OverviewComponent implements OnInit {
   error?: string;
 
   ngOnInit(): void {
-    this.loading = true;
     this.getDocuments();
-    this.loading = false;
   }
 
-  onSubmit() {
-    this.loading = true;
-    this.error = '';
+  onLoadingChange(loading: boolean) {
+    this.loading = loading;
+  }
 
-    this.api.addDocument({
-      title: this.title,
-      content: ' ',
-    }).subscribe({
-      next: (data: Document) => {
-        this.addedDocument = data;
-        this.documents.push(data);
-
-        console.log('Successfully added document:', data);
-
-        this.router.navigate([`/doc/${data._id}`]);
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'Failed to add new document';
-        this.loading = false;
-
-        console.error('Failed to add document:', err);
-      }
-    });
+  onErrorChange(error: string) {
+    this.error = error;
   }
 
   getDocuments(): void {
-    this.api.getDocuments().subscribe((data: Document[]) => {
-      this.documents = data;
+    this.loading = true;
+    this.api.getDocuments().subscribe({
+      next: (data: Document[]) => {
+        this.documents = data;
+        this.loading = false;
 
-      console.log('Successfully fetched all documents:', data);
+        console.log('Successfully fetched all documents:', data);
+      },
+      error: (err) => {
+        this.error = 'Failed to fetch documents';
+        this.loading = false;
+
+        console.error('Failed to fetch documents:', err);
+      }
     });
   }
 }

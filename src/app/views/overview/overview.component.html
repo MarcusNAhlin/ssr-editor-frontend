@@ -1,10 +1,10 @@
 <main>
   <h2>Documents</h2>
 
-  <form #f="ngForm" (ngSubmit)="onSubmit()">
-    <input name="title" [(ngModel)]="title" required minlength="1" #c="ngModel">
-    <button [disabled]="f.invalid || loading">Add Document</button>
-  </form>
+  <app-document-add-form
+    (loadingChange)="onLoadingChange($event)"
+    (errorChange)="onErrorChange($event)"
+  />
 
   <div class="document-holder">
     <div *ngFor="let document of documents" class="document">
