@@ -1,0 +1,6 @@
+@use '../../../styles.scss' as *;
+
+.nav-title a {
+  text-decoration: none;
+  color: $text-primary;
+}
