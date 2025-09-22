@@ -103,7 +103,8 @@
               "src/styles/buttons.scss",
               "src/styles/forms.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "codeCoverage": true
           }
         },
         "lint": {
