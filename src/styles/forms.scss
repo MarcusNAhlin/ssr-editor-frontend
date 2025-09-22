@@ -1,0 +1,16 @@
+@use 'sass:color';
+@use './variables.scss' as *;
+
+.form-field {
+  background-color: $bg-elevated;
+  color: $text-primary;
+  border: none;
+  font-size: 110%;
+  padding: 0.6rem;
+  border-radius: 0.1rem;
+  padding-left: 0.6rem;
+}
+
+.form-field:focus {
+  outline: none;
+}

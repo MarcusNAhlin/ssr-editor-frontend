@@ -1,22 +1,27 @@
-<div *ngIf="loading">Loading…</div>
+
+<main>
+  <div *ngIf="loading">Loading…</div>
 
 
-<div *ngIf="!loading" class="edit-holder">
-  <p class="error" *ngIf="error">{{ error }}</p>
+  <div *ngIf="!loading" class="edit-holder">
+    <p class="error" *ngIf="error">{{ error }}</p>
 
-  <button (click)="deleteDocument()">Delete Document</button>
 
-  <form *ngIf="document" form #f="ngForm" (ngSubmit)="saveDocument()">
-    <label>
-      Title
-      <input [(ngModel)]="document.title" name="title" placeholder="Document title" />
-    </label>
+    <form *ngIf="document" form #f="ngForm" (ngSubmit)="saveDocument()">
+      <label>
+        Title
+        <input [(ngModel)]="document.title" class="form-field" name="title" placeholder="Document title" />
+      </label>
 
-    <label>
-      Content
-      <textarea [(ngModel)]="document.content" name="content" rows="14" placeholder="Start typing…"></textarea>
-    </label>
+      <label>
+        Content
+        <textarea [(ngModel)]="document.content" class="form-field" name="content" rows="14" placeholder="Start typing…"></textarea>
+      </label>
 
-    <button [disabled]="loading">Save</button>
-  </form>
-</div>
+      <div class="actions">
+        <button type="button" (click)="deleteDocument()" class="button delete-button">Delete Document</button>
+        <button type="submit" [disabled]="loading" class="button-primary save-button">Save</button>
+      </div>
+    </form>
+  </div>
+</main>

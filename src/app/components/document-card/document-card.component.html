@@ -1,0 +1,4 @@
+<div *ngIf="document" class="document">
+  <h3>{{ document.title || 'ID: ' + document._id }}</h3>
+  <a routerLink="/doc/{{ document._id }}" class="document-link">&#8618;</a>
+</div>

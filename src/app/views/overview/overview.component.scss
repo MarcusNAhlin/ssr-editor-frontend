@@ -1,4 +1,4 @@
-@use '../../../styles.scss' as *;
+@use '../../../styles/variables.scss' as *;
 
 h2,
 h3 {
@@ -21,12 +21,12 @@ a {
   justify-content: center;
 }
 
-.document {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  width: 30vw;
-  padding: 1rem;
+// .document {
+//   display: flex;
+//   flex-direction: column;
+//   margin: 0;
+//   width: 30vw;
+//   padding: 1rem;
 
-  background: $bg-elevated;
-}
+//   background: $bg-elevated;
+// }
