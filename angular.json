@@ -103,7 +103,14 @@
               "src/styles/buttons.scss",
               "src/styles/forms.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "codeCoverage": true,
+            "fileReplacements": [
+              {
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.test.ts"
+              }
+            ]
           }
         },
         "lint": {
