@@ -1,23 +1,24 @@
-@use '../../../styles.scss' as *;
+@use 'sass:color';
+@use '../../../styles/variables.scss' as *;
 
 form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
 
-label {
-  display: flex;
-  flex-direction: column;
-  color: $text-primary;
-}
+  label {
+    display: flex;
+    flex-direction: column;
+    color: $text-primary;
+  }
 
-.actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    justify-content: space-between;
+  }
 }
-
 
 .error {
   color: red;

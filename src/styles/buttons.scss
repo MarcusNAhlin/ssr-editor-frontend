@@ -1,0 +1,46 @@
+@use 'sass:color';
+@use './variables.scss' as *;
+
+.button {
+  color: $text-primary;
+  background-color: $bg-elevated;
+  outline: none;
+  border: none;
+  padding: 0.4rem 1rem;
+  font-size: 110%;
+  border-radius: 0.1rem;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: color.adjust($highlight, $lightness: 10%);
+    color: $bg-elevated;
+    cursor: pointer;
+  }
+
+  &:active {
+    background-color: color.adjust($highlight, $lightness: 20%);
+    color: $bg-elevated;
+    transform: scale(0.98);
+  }
+}
+
+.button-primary {
+  color: $bg-primary;
+  background-color: $highlight;
+  outline: none;
+  border: none;
+  padding: 0.4rem 1rem;
+  font-size: 110%;
+  border-radius: 0.1rem;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: color.adjust($highlight, $lightness: -20%);
+    cursor: pointer;
+  }
+
+  &:active {
+    background-color: color.adjust($highlight, $lightness: -30%);
+    transform: scale(0.98);
+  }
+}

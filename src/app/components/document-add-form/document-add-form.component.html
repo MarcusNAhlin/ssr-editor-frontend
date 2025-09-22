@@ -1,4 +1,4 @@
-<form #f="ngForm" (ngSubmit)="onSubmit()">
-  <input name="title" [(ngModel)]="title" required minlength="1" #c="ngModel">
-  <button [disabled]="f.invalid">Add Document</button>
+<form class="add-form" #f="ngForm" (ngSubmit)="onSubmit()">
+  <input name="title" class="form-field add-input" placeholder="Title" [(ngModel)]="title" required minlength="1" #c="ngModel">
+  <button class="button-primary" [disabled]="f.invalid">Create</button>
 </form>
