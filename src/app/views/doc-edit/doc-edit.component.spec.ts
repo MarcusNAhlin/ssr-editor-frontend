@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { DocEditComponent } from './doc-edit.component';
 
@@ -8,7 +11,8 @@ describe('DocEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DocEditComponent]
+      imports: [DocEditComponent],
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()]
     })
       .compileComponents();
 
@@ -17,7 +21,7 @@ describe('DocEditComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('TC01 - should create', () => {
     expect(component).toBeTruthy();
   });
 });
