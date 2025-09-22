@@ -66,6 +66,26 @@ describe('ApiService', () => {
 
       req.flush('Something went wrong', { status: 500, statusText: 'Server Error' });
     });
+
+    it('TC03.1 - should handle client-side/network errors', () => {
+      spyOn(console, 'error');
+
+      service.getDocuments().subscribe({
+        next: () => fail('should have failed with a client-side error'),
+        error: (error) => {
+          expect(error).toBeTruthy();
+          expect(error.message).toContain('Something bad happened; please try again later.');
+        }
+      });
+
+      const req = httpTestingController.expectOne(`${apiURL}/docs`);
+
+      // simulate client-side error
+      const errorEvent = new ProgressEvent('error');
+      req.error(errorEvent);
+
+      expect(console.error).toHaveBeenCalled();
+    });
   });
 
   describe('getDocument', () => {
