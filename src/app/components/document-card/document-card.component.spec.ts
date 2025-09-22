@@ -8,7 +8,7 @@ const mockDocument = {
   content: 'Test document content.'
 };
 
-fdescribe('DocumentCardComponent', () => {
+describe('DocumentCardComponent', () => {
   let component: DocumentCardComponent;
   let fixture: ComponentFixture<DocumentCardComponent>;
 
