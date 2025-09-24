@@ -1,6 +1,8 @@
 name: Frontend Tests
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 
 jobs:
   test:
@@ -9,18 +11,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Use Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - uses: browser-actions/setup-chrome@v1
+      - name: Setup Chrome
         id: chrome
+        uses: browser-actions/setup-chrome@v1
 
-      - run: npm ci
+      - name: Install deps
+        run: npm ci
 
-      - name: Test
+      - name: Run unit tests (Karma)
         env:
           CI: 'true'
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
-        run: npm run test:ci
+        run: npm test

@@ -39,7 +39,7 @@ module.exports = function (config) {
       ]
     },
     reporters: ['progress', 'kjhtml'],
-    restartOnFileChange: true,
+    restartOnFileChange: false,
     singleRun: true,
   });
 };
