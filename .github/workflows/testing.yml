@@ -23,4 +23,4 @@ jobs:
         env:
           CI: 'true'
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
-        run: ng test
+        run: npx ng test --browsers=ChromeHeadless
