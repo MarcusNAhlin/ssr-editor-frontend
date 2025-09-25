@@ -28,4 +28,4 @@ jobs:
         env:
           CI: 'true'
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
-        run: npm test:ci
+        run: npm run test:ci
