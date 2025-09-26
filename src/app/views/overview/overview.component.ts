@@ -4,12 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { DocumentCardComponent } from '../../components/document-card/document-card.component';
 import { DocumentAddFormComponent } from '../../components/document-add-form/document-add-form.component';
 import { ApiService } from '../../services/api.service';
-
-interface Document {
-  _id?: string;
-  title: string;
-  content: string;
-}
+import { Document } from '../../types/document';
 
 @Component({
   selector: 'app-overview',

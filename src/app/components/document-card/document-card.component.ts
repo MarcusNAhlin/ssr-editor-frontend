@@ -1,12 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
-interface Document {
-  _id?: string;
-  title: string;
-  content: string;
-}
+import { Document } from '../../types/document';
 
 @Component({
   selector: 'app-document-card',

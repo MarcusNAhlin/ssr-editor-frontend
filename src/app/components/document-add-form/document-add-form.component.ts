@@ -3,12 +3,7 @@ import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
-
-interface Document {
-  _id?: string;
-  title: string;
-  content: string;
-}
+import { Document } from '../../types/document';
 
 @Component({
   selector: 'app-document-add-form',

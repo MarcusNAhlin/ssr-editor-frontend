@@ -3,12 +3,7 @@ import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
-interface Document {
-  _id?: string;
-  title: string;
-  content: string;
-}
+import { Document } from '../../types/document';
 
 @Component({
   selector: 'app-doc-edit',

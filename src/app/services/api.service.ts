@@ -3,12 +3,7 @@ import { inject } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-interface Document {
-  _id?: string,
-  title: string,
-  content: string,
-}
+import { Document } from '../types/document';
 
 @Injectable({
   providedIn: 'root'
