@@ -4,12 +4,7 @@ import { provideHttpClientTesting, HttpTestingController } from '@angular/common
 
 import { ApiService } from './api.service';
 import { environment } from '../../environments/environment';
-
-interface Document {
-  _id?: string,
-  title: string,
-  content: string,
-}
+import { Document } from '../types/document';
 
 describe('ApiService', () => {
   let service: ApiService;
