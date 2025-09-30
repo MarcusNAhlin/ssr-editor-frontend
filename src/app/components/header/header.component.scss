@@ -32,16 +32,12 @@
   }
 
   .right {
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: $primary;
-      color: $text-primary;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 2px solid $border;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    button {
+      margin-left: 10px;
     }
   }
 }
