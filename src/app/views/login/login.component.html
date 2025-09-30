@@ -1,0 +1,31 @@
+<div class="login-wrap">
+  <h1>Sign in</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <label>
+      <span>Email</span>
+      <input type="email" class="form-field" formControlName="email" placeholder="you@example.com" />
+    </label>
+    <div class="error" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+      {{ form.controls.email.hasError('required') ? 'Email is required' : 'Enter a valid email' }}
+    </div>
+
+    <label>
+      <span>Password</span>
+      <input type="password" class="form-field" formControlName="password" placeholder="Enter Password" />
+    </label>
+    <div class="error" *ngIf="form.controls.password.touched && form.controls.password.invalid">
+      {{ form.controls.password.hasError('required') ? 'Password is required' : 'Min 6 characters' }}
+    </div>
+
+    <button type="submit" class="button-primary" [disabled]="form.invalid || loading()">
+      {{ loading() ? 'Signing in…' : 'Sign in' }}
+    </button>
+
+    <p class="error" *ngIf="error()">{{ error() }}</p>
+  </form>
+
+  <p class="muted">
+    Don’t have an account? <a routerLink="/register">Create one</a>
+  </p>
+</div>
