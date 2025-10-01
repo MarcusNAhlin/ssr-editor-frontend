@@ -1,30 +1,34 @@
-import { User } from  './user';
+import { User } from './user';
 
-export interface LoginDto {
-  email: string,
-  password: string,
-};
+export interface LoginDTO{
+  email: string;
+  password: string;
+}
 
-export interface LoginResponse { 
-    token: string; 
-    refresh_token?: string; 
-    user?: User;
-};
+export interface LoginResponse {
+  accessToken: string;
+}
 
-export interface RegisterDto {
-  email: string,
-  password: string,
-};
+export interface RefreshResponse {
+  accessToken: string;
+}
+
+export interface RegisterDTO {
+  email: string;
+  password: string;
+}
 
 export interface VerifyResponse {
   message: string;
 }
 
 export interface AuthSuccessResponse {
-  token: string;
-  refresh_token?: string;
-  user?: User;
+  accessToken: string;
+  user: User;
 }
 
-export type RegisterResponse = VerifyResponse | AuthSuccessResponse;
-
+export interface RegisterResponse {
+  _id: string;
+  email: string;
+  verified: boolean;
+}

@@ -4,52 +4,56 @@ import { tap, catchError, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 import { User } from '../types/user';
-import { LoginDto, LoginResponse, RegisterDto, RegisterResponse } from '../types/auth';
+import { LoginDTO, LoginResponse, RegisterDTO, RegisterResponse, RefreshResponse } from '../types/auth';
 
 const TOKEN_KEY = 'access_token';
-const REFRESH_KEY = 'refresh_token';
-const USER_KEY = 'user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiUrl = environment.API_URL.replace(/\/+$/, '');
   private authUrl = `${this.apiUrl}/auth`;
-  private _user = signal<User | null>(this.restore<User>(USER_KEY));
+  private _user = signal<User | null>(null);
 
   user = computed(() => this._user());
   isAuthed = computed(() => this._user() !== null);
 
-  isAuthenticated(): boolean {
-    const token = this.getToken();
-    return !!token && !this.isExpired(token);
-  }
-
   private http = inject(HttpClient);
 
-  login(credentials: LoginDto) {
-    return this.http.post<LoginResponse>(`${this.authUrl}/login`, credentials).pipe(
-      tap(res => {
-        this.setItem(TOKEN_KEY, res.token);
-        if (res.refresh_token) this.setItem(REFRESH_KEY, res.refresh_token);
-        const u: User = res.user ?? { email: credentials.email };
+  constructor() {
+    const token = this.getToken();
+    if (token) {
+      this._user.set(this.decodeToken(token));
+    }
+  }
 
-        this.setItem(USER_KEY, u);
-        this._user.set(u);
+  isAuthenticated() {
+    return this.getItem(TOKEN_KEY);
+  }
+
+  login(credentials: LoginDTO) {
+    return this.http.post<LoginResponse>(`${this.authUrl}/login`, credentials, { withCredentials: true }).pipe(
+      tap(res => {
+        this.setItem(TOKEN_KEY, res.accessToken);
+        this._user.set(this.decodeToken(res.accessToken));
       }),
       catchError(err => throwError(() => err))
     );
   }
 
-  register(body: RegisterDto) {
+  refreshToken() {
+    return this.http.post<RefreshResponse>(`${this.authUrl}/refresh`, {}, { withCredentials: true }).pipe(
+      tap(res => {
+        this.setItem(TOKEN_KEY, res.accessToken);
+      })
+    );
+  }
+
+  register(body: RegisterDTO) {
     return this.http.post<RegisterResponse>(`${this.authUrl}/register`, body).pipe(
       tap(res => {
-        if ('token' in res) {
-          this.setItem(TOKEN_KEY, res.token);
-          if (res.refresh_token) this.setItem(REFRESH_KEY, res.refresh_token);
-          if (res.user) {
-            this.setItem(USER_KEY, res.user);
-            this._user.set(res.user);
-          }
+        if ('accessToken' in res) {
+          this.setItem(TOKEN_KEY, res.accessToken);
+          this._user.set(this.decodeToken(res.accessToken as string));
         }
       })
     );
@@ -57,21 +61,12 @@ export class AuthService {
 
   logout(): void {
     this.removeItem(TOKEN_KEY);
-    this.removeItem(REFRESH_KEY);
-    this.removeItem(USER_KEY);
     this._user.set(null);
+    this.http.post(`${this.authUrl}/logout`, {}).subscribe();
   }
 
   getToken(): string | null {
     return this.getItem<string>(TOKEN_KEY);
-  }
-
-  private isExpired(jwt: string): boolean {
-    try {
-      const payload = JSON.parse(atob(jwt.split('.')[1] || ''));
-      if (!payload?.exp) return false;
-      return Date.now() / 1000 >= payload.exp;
-    } catch { return false; }
   }
 
   private getItem<T = string>(key: string): T | null {
@@ -91,5 +86,15 @@ export class AuthService {
     localStorage.removeItem(key);
   }
 
-  private restore<T>(key: string): T | null { return this.getItem<T>(key); }
+  private decodeToken(token: string): User | null {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1] || ''));
+      if (payload) {
+        return payload as User;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
 }

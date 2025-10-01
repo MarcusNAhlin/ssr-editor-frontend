@@ -35,7 +35,11 @@ export class DocEditComponent implements OnInit {
 
   getDocument(id: string): void {
     this.api.getDocument(id).subscribe({
-      next: (doc) => { this.document = doc; this.loading = false; },
+      next: (doc) => {
+        this.document = doc;
+        this.loading = false;
+        console.log('Successfully loaded document:', this.document);
+      },
       error: () => { this.error = 'Failed to load document.'; this.loading = false; }
     });
   }

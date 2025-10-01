@@ -5,13 +5,20 @@ const TOKEN_KEY = 'access_token';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<unknown>, next: HttpHandler) { // What type to use here?
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
-      req = req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` }
+  intercept(req: HttpRequest<unknown>, next: HttpHandler) {
+    if (req.url.endsWith('/refresh')) {
+      return next.handle(req.clone({ withCredentials: true }));
+    }
+
+    const accessToken = localStorage.getItem(TOKEN_KEY);
+    let authReq = req.clone({
+      withCredentials: true
+    });
+    if (accessToken) {
+      authReq = authReq.clone({
+        setHeaders: { Authorization: `Bearer ${accessToken}` }
       });
     }
-    return next.handle(req);
+    return next.handle(authReq);
   }
 }
