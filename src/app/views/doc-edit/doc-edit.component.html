@@ -1,4 +1,3 @@
-
 <main>
   <div *ngIf="loading">Loading…</div>
 
@@ -8,6 +7,7 @@
 
 
     <form *ngIf="document" form #f="ngForm" (ngSubmit)="saveDocument()">
+
       <label>
         Title
         <input [(ngModel)]="document.title" class="form-field" name="title" placeholder="Document title" />
@@ -15,13 +15,21 @@
 
       <label>
         Content
-        <textarea [(ngModel)]="document.content" class="form-field" name="content" rows="14" placeholder="Start typing…"></textarea>
+        <textarea [(ngModel)]="document.content" class="form-field" name="content" rows="14"
+          placeholder="Start typing…"></textarea>
       </label>
 
       <div class="actions">
         <button type="button" (click)="deleteDocument()" class="button delete-button">Delete Document</button>
+        <button class="button" type="button" (click)="showShare = true" [disabled]="!document._id">
+          Share
+        </button>
         <button type="submit" [disabled]="loading" class="button-primary save-button">Save</button>
       </div>
     </form>
+
+    <app-share-doc-dialog [open]="showShare" [docId]="document?._id ?? null" [docName]="document?.title ?? ''"
+      (closed)="showShare = false" (success)="showShare = false">
+    </app-share-doc-dialog>
   </div>
 </main>
