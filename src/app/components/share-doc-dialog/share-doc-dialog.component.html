@@ -1,0 +1,19 @@
+<app-modal [open]="open" [title]="'Share document'" (close)="onCancel()">
+  <p *ngIf="docName" class="muted">{{ docName }}</p>
+  <p *ngIf="docId" class="muted small">ID: {{ docId }}</p>
+
+  <form (ngSubmit)="submitForm()" class="share-form" novalidate>
+    <label>
+      <span>Email</span>
+      <input #emailInput type="email" class="form-field" [(ngModel)]="email" name="email" required autocomplete="email" />
+    </label>
+    <div class="error" *ngIf="submitted && !isValidEmail(email)">Enter a valid email.</div>
+    
+    <div modal-actions>
+      <button type="button" class="button" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="button-primary" [disabled]="pending || !email.trim()">
+        {{ pending ? 'Sending…' : 'Send invite' }}
+      </button>
+    </div>
+  </form>
+</app-modal>
