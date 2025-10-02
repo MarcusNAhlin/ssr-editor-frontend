@@ -6,7 +6,7 @@
     <p class="error" *ngIf="error">{{ error }}</p>
 
 
-    <form *ngIf="document" form #f="ngForm" (ngSubmit)="saveDocument()">
+    <form *ngIf="document" #f="ngForm" (ngSubmit)="saveDocument()">
 
       <label>
         Title
@@ -28,8 +28,7 @@
       </div>
     </form>
 
-    <app-share-doc-dialog [open]="showShare" [docId]="document?._id ?? null" [docName]="document?.title ?? ''"
-      (closed)="showShare = false" (success)="showShare = false">
+    <app-share-doc-dialog [open]="showShare" [doc]="document ?? null" (closed)="showShare = false">
     </app-share-doc-dialog>
   </div>
 </main>
