@@ -1,6 +1,10 @@
 @use 'sass:color';
 @use '../../../styles/variables.scss' as *;
 
+.share-header {
+  padding-bottom: 12px;
+}
+
 .share-form {
   display: grid;
   gap: 12px;
@@ -30,3 +34,34 @@
   margin-top: 4px;
 }
 
+.shared-with {
+  margin-top: 8px;
+
+  h4 {
+    margin: 0 0 6px;
+    font-size: .95rem;
+    opacity: .9;
+  }
+}
+
+.shared-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.shared-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+.shared-item:last-child { border-bottom: 0; }
+
+.email {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
