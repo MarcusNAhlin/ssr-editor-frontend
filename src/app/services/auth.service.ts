@@ -59,6 +59,10 @@ export class AuthService {
     );
   }
 
+  verify(userId: string, body: unknown){
+    return this.http.post<unknown>(`${this.authUrl}/verify/${userId}`, body);
+  }
+
   logout(): void {
     this.removeItem(TOKEN_KEY);
     this._user.set(null);

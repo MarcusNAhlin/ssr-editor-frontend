@@ -5,6 +5,7 @@ import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 import { authGuard } from './auth/auth.guard';
 import { guestGuard } from './auth/guest.guard';
+import { AccountVerificationComponent } from './views/account-verification/account-verification.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'overview', pathMatch: 'full' },
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'register', canMatch: [guestGuard], component: RegisterComponent },
   { path: 'overview', canMatch: [authGuard], component: OverviewComponent },
   { path: 'doc/:id', canMatch: [authGuard], component: DocEditComponent },
+  { path: 'verify/:id', component: AccountVerificationComponent },
   { path: '**', redirectTo: 'overview' }
 ];

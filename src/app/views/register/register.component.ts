@@ -37,9 +37,9 @@ export class RegisterComponent {
 
     this.auth.register(this.form.value as { email: string; password: string })
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.loading.set(false);
-          this.router.navigateByUrl('/overview');
+          this.router.navigateByUrl(`/verify/${res._id}`);
         },
         error: (err) => {
           this.loading.set(false);
