@@ -5,9 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Document } from '../../types/document';
 
+import { ShareDocDialogComponent } from '../../components/share-doc-dialog/share-doc-dialog.component';
+
 @Component({
   selector: 'app-doc-edit',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ShareDocDialogComponent],
   templateUrl: './doc-edit.component.html',
   styleUrl: './doc-edit.component.scss'
 })
@@ -21,6 +23,7 @@ export class DocEditComponent implements OnInit {
 
   loading = true;
   saving = false;
+  showShare = false;
   error?: string;
 
   ngOnInit(): void {
@@ -35,7 +38,11 @@ export class DocEditComponent implements OnInit {
 
   getDocument(id: string): void {
     this.api.getDocument(id).subscribe({
-      next: (doc) => { this.document = doc; this.loading = false; },
+      next: (doc) => {
+        this.document = doc;
+        this.loading = false;
+        console.log('Successfully loaded document:', this.document);
+      },
       error: () => { this.error = 'Failed to load document.'; this.loading = false; }
     });
   }

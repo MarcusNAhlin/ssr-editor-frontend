@@ -1,13 +1,23 @@
 <header class="app-header">
   <div class="left">
     <h1>SSR Editor</h1>
-    <nav>
+
+    <nav *ngIf="isAuthed(); else guestNav">
       <a routerLink="/overview" routerLinkActive="active">Overview</a>
     </nav>
+    <ng-template #guestNav></ng-template>
   </div>
-  <div class="right">
-    <div class="user-avatar">
-      <span>U</span>
+
+  <div class="right" *ngIf="isAuthed(); else loggedOut">
+    <span>{{ email() }}</span>
+    <button class="button-primary" (click)="logout()">Logout</button>
+  </div>
+
+  <ng-template #loggedOut>
+    <div class="right">
+      <a routerLink="/login" class="button button-primary">Login</a>
+      <a routerLink="/register" class="button">Register</a>
     </div>
-  </div>
+  </ng-template>
+
 </header>

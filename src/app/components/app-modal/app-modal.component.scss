@@ -1,0 +1,51 @@
+@use 'sass:color';
+@use '../../../styles/variables.scss' as *;
+
+:host {
+    display: contents;
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .5);
+    z-index: 1000;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(480px, calc(100% - 2rem));
+    max-height: calc(100vh - 2rem);
+    overflow: auto;
+
+    background: $bg-primary;
+    color: $text-primary;
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 1001;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.icon-btn {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+}

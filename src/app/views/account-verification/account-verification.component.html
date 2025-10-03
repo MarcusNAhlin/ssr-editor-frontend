@@ -1,0 +1,24 @@
+<main>
+    <div *ngIf="loading">Loading…</div>
+
+
+    <div *ngIf="!loading" class="verify-holder">
+        <p class="error" *ngIf="error">{{ error }}</p>
+        <p>A verification code will be sent to your email</p>
+        <p><strong>Check your spam folder!!</strong></p>
+
+
+        <form #f="ngForm" (ngSubmit)="submitVerificationCode()">
+            <label>
+                Enter verification code
+                <input #codeInput minlength="6" maxlength="6" inputmode="numeric" class="form-field" name="code"
+                    placeholder="Enter code" [(ngModel)]="code" #c="ngModel" />
+            </label>
+
+            <div class="actions">
+                <button type="submit" [disabled]="loading" class="button-primary save-button">Send</button>
+            </div>
+        </form>
+
+    </div>
+</main>
