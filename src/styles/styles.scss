@@ -20,6 +20,10 @@ html, body {
   color: $text-primary;
 }
 
+a {
+  color: $highlight;
+}
+
 main {
   margin: 1.4rem;
 }
