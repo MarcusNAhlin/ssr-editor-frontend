@@ -1,0 +1,21 @@
+<ng-container *ngIf="open">
+    <div class="backdrop" role="button" tabindex="0" aria-label="Close dialog" (click)="closeOnBackdrop && closeModal.emit()"
+        (keydown.enter)="closeOnBackdrop && closeModal.emit()" (keydown.space)="closeOnBackdrop && closeModal.emit()"></div>
+
+    <div class="modal" role="dialog" aria-modal="true" [attr.aria-labelledby]="titleId" tabindex="-1"
+        (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+
+        <header class="modal-header" *ngIf="title">
+            <h3 [id]="titleId">{{ title }}</h3>
+            <button type="button" class="icon-btn" aria-label="Close" (click)="closeModal.emit()">✕</button>
+        </header>
+
+        <section class="modal-body">
+            <ng-content></ng-content>
+        </section>
+
+        <footer class="modal-actions">
+            <ng-content select="[modal-actions]"></ng-content>
+        </footer>
+    </div>
+</ng-container>

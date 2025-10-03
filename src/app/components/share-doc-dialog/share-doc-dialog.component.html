@@ -1,0 +1,37 @@
+<app-modal [open]="open" [title]="'Share document'" (closeModal)="onCancel()">
+
+  <header class="share-header">
+    <p *ngIf="doc?.title" class="muted">{{ doc?.title }}</p>
+    <p *ngIf="doc?._id" class="muted small">ID: {{ doc?._id }}</p>
+  </header>
+
+  <form (ngSubmit)="submitForm()" class="share-form" novalidate>
+    <label>
+      <span>Enter Email</span>
+      <input #emailInput type="email" class="form-field" [(ngModel)]="email" name="email" required autocomplete="email"
+        placeholder="friend@example.com" />
+    </label>
+    <div class="error" *ngIf="submitted && !isValidEmail(email)">Enter a valid email.</div>
+    <div class="error" *ngIf="serverError" aria-live="polite">
+      {{ serverError }}
+    </div>
+
+    <section class="shared-with">
+      <h4>People with access</h4>
+      <div *ngIf="!currentShared.length" class="muted">Not shared with anyone.</div>
+      <ul *ngIf="currentShared.length" class="shared-list">
+        <li *ngFor="let u of currentShared" class="shared-item">
+          <span class="email">{{ u.email }}</span>
+        </li>
+      </ul>
+    </section>
+
+    <div modal-actions>
+      <button type="button" class="button" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="button-primary" [disabled]="pending || !email.trim()">
+        {{ pending ? 'Sending…' : 'Send invite' }}
+      </button>
+    </div>
+
+  </form>
+</app-modal>

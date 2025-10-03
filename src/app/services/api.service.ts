@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Document } from '../types/document';
+import { Share } from '../types/share';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,12 @@ export class ApiService {
 
   deleteDocument(_id: Document['_id']): Observable<Document> {
     return this.http.delete<Document>(this.apiURL + '/docs/' + _id).pipe(
+      catchError(this.handleError)
+    );;
+  }
+
+  shareDocument(_id: Document['_id'], userData: {shareToEmail: string}): Observable<Share> {
+    return this.http.post<Share>(this.apiURL + '/docs/' + _id + '/share', userData).pipe(
       catchError(this.handleError)
     );;
   }
