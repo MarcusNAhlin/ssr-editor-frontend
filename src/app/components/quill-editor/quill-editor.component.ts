@@ -1,9 +1,10 @@
-import { Component, AfterViewInit, ElementRef, OnDestroy, ViewChild, Input } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, OnDestroy, ViewChild, Input, inject, computed } from '@angular/core';
 import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
 import * as Y from 'yjs';
 import { SocketIOProvider } from 'y-socket.io';
 import { QuillBinding } from 'y-quill';
+import { AuthService } from '../../services/auth.service';
 
 Quill.register('modules/cursors', QuillCursors);
 
@@ -17,12 +18,14 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
   @ViewChild('host', { static: true }) host!: ElementRef<HTMLDivElement>;
   @Input ({ required: true }) docId!: string;
 
+  private auth = inject(AuthService);
+
   private quill!: Quill;
   private ydoc!: Y.Doc;
   private provider!: SocketIOProvider;
   private yText!: Y.Text;
   private binding!: QuillBinding;
-  readonly userEmail = 'albin@rybergs.net';
+  readonly userEmail = computed(() => this.auth.user()?.email ?? 'Annon');
 
   ngAfterViewInit() {
     this.quill = new Quill(this.host.nativeElement, {
@@ -46,7 +49,8 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
     );
 
     this.provider.awareness.setLocalStateField('user', {
-      name: `${this.userEmail}`, color: '#4A6A8A'
+      name: this.userEmail(), 
+      color: '#4A6A8A'
     });
 
     this.yText = this.ydoc.getText('rich');
