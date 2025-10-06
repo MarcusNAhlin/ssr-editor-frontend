@@ -40,7 +40,7 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
 
     this.ydoc = new Y.Doc();
     this.provider = new SocketIOProvider(
-      'ws://localhost:3000',
+      'http://localhost:3000',
       `${this.docId}`,
       this.ydoc,
       {
