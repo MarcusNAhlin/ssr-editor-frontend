@@ -13,11 +13,16 @@
         <input [(ngModel)]="document.title" class="form-field" name="title" placeholder="Document title" />
       </label>
 
+      @if (isCode) {
       <label>
         Content
         <textarea [(ngModel)]="document.content" class="form-field" name="content" rows="14"
           placeholder="Start typing…"></textarea>
       </label>
+      } @else {
+      <!-- <app-quill-editor [(ngModel)]="document!.content" name="content"></app-quill-editor> -->
+       <app-quill-editor [docId]="document._id || 'demo-doc'"></app-quill-editor>
+      }
 
       <div class="actions">
         <button type="button" (click)="deleteDocument()" class="button delete-button">Delete Document</button>
