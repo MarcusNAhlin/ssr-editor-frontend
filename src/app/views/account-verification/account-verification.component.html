@@ -1,22 +1,23 @@
-<main>
+<main class="verify-page">
     <div *ngIf="loading">Loading…</div>
 
-
-    <div *ngIf="!loading" class="verify-holder">
-        <p class="error" *ngIf="error">{{ error }}</p>
-        <p>A verification code will be sent to your email</p>
-        <p><strong>Check your spam folder!!</strong></p>
-
-
+    <div *ngIf="!loading" class="verify-card">
+        <header class="verify-header">
+            <h1 id="verify-title">Verify your email</h1>
+            <p>A verification code will be sent to your email</p>
+            <p><strong>Check your spam folder!!</strong></p>
+        </header>
         <form #f="ngForm" (ngSubmit)="submitVerificationCode()">
             <label>
-                Enter verification code
-                <input #codeInput minlength="6" maxlength="6" inputmode="numeric" class="form-field" name="code"
-                    placeholder="Enter code" [(ngModel)]="code" #c="ngModel" />
+                <span>Enter 6 digit verification code</span>
+                <input #codeInput minlength="6" maxlength="6" inputmode="numeric" class="form-field form-field-wide"
+                    name="code" placeholder="Enter code" [(ngModel)]="code" #c="ngModel" pattern="\\d{6}" />
             </label>
 
+            <p class="error" *ngIf="error">{{ error }}</p>
+
             <div class="actions">
-                <button type="submit" [disabled]="loading" class="button-primary save-button">Send</button>
+                <button type="submit" [disabled]="loading" class="button-primary button-wide">Send</button>
             </div>
         </form>
 
