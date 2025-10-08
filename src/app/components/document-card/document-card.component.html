@@ -1,4 +1,4 @@
-<a *ngIf="document" class="document" [routerLink]="['/doc', document._id]">
+<a *ngIf="document" class="document" routerLink="/doc/{{ document._id }}">
   <div class="doc-hero">
     <lucide-icon class="doc-icon" name="File" aria-hidden="true"></lucide-icon>
 
