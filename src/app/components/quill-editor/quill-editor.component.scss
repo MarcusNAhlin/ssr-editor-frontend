@@ -1,0 +1,7 @@
+.quill-container {
+    height: 300px;
+}
+
+:host ::ng-deep .ql-container {
+    height: 100%;
+}
