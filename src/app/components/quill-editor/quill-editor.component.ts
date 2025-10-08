@@ -2,7 +2,7 @@ import { Component, AfterViewInit, ElementRef, OnDestroy, ViewChild, Input, inje
 import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
 import * as Y from 'yjs';
-import { SocketIOProvider } from 'y-socket.io';
+import { WebsocketProvider } from 'y-websocket';
 import { QuillBinding } from 'y-quill';
 import { AuthService } from '../../services/auth.service';
 
@@ -22,7 +22,7 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
 
   private quill!: Quill;
   private ydoc!: Y.Doc;
-  private provider!: SocketIOProvider;
+  private provider!: WebsocketProvider;
   private yText!: Y.Text;
   private binding!: QuillBinding;
   readonly userEmail = computed(() => this.auth.user()?.email ?? 'Annon');
@@ -39,13 +39,10 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
     });
 
     this.ydoc = new Y.Doc();
-    this.provider = new SocketIOProvider(
-      'http://localhost:3000',
-      `yjs|${this.docId}`,
-      this.ydoc,
-      {
-
-      }
+    this.provider = new WebsocketProvider(
+      'ws://localhost:3000',
+      this.docId,
+      this.ydoc
     );
 
     this.provider.awareness.setLocalStateField('user', {
