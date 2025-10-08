@@ -6,10 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { Document } from '../../types/document';
 
 import { ShareDocDialogComponent } from '../../components/share-doc-dialog/share-doc-dialog.component';
+import { QuillEditorComponent } from '../../components/quill-editor/quill-editor.component';
 
 @Component({
   selector: 'app-doc-edit',
-  imports: [CommonModule, FormsModule, ShareDocDialogComponent],
+  imports: [CommonModule, FormsModule, ShareDocDialogComponent, QuillEditorComponent],
   templateUrl: './doc-edit.component.html',
   styleUrl: './doc-edit.component.scss'
 })
