@@ -38,6 +38,8 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
       },
     });
 
+    this.quill.enable(false);
+
     this.ydoc = new Y.Doc();
     this.provider = new WebsocketProvider(
       'ws://localhost:3000',
@@ -45,14 +47,19 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
       this.ydoc
     );
 
+    this.provider.on('sync', (isSynced: boolean) => {
+      if (isSynced) {
+        this.quill.enable(true);
+      }
+    });
+
     this.provider.awareness.setLocalStateField('user', {
-      name: this.userEmail(), 
+      name: this.userEmail(),
       color: '#4A6A8A'
     });
 
     this.yText = this.ydoc.getText('rich');
     this.binding = new QuillBinding(this.yText, this.quill, this.provider.awareness);
-  
   }
 
   getHtml(): string { return this.quill.root.innerHTML; }
