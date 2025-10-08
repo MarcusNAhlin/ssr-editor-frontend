@@ -82,10 +82,10 @@ export class ShareDocDialogComponent implements OnChanges {
       })
     ).subscribe({
       next: () => {
-        // this.pending = false;
         this.currentShared = [...this.currentShared, { email: this.email }];
         this.success.emit({ email: this.email });
         this.email = '';
+        this.submitted = false;
         this.cdr.markForCheck();
       },
       error: (err) => {
