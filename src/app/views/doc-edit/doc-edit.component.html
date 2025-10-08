@@ -13,7 +13,9 @@
         <input [(ngModel)]="document.title" class="form-field" name="title" placeholder="Document title" />
       </label>
 
-      <app-quill-editor [docId]="document._id || 'demo-doc'"></app-quill-editor>
+      <app-monaco-editor [docId]="document._id || 'demo-doc'"></app-monaco-editor>
+
+      <!-- <app-quill-editor [docId]="document._id || 'demo-doc'"></app-quill-editor> -->
 
       <div class="actions">
         <button type="button" (click)="deleteDocument()" class="button delete-button">Delete Document</button>

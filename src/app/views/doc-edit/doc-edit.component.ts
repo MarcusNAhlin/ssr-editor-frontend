@@ -7,10 +7,11 @@ import { Document } from '../../types/document';
 
 import { ShareDocDialogComponent } from '../../components/share-doc-dialog/share-doc-dialog.component';
 import { QuillEditorComponent } from '../../components/quill-editor/quill-editor.component';
+import { MonacoEditorComponent } from '../../components/monaco-editor/monaco-editor.component';
 
 @Component({
   selector: 'app-doc-edit',
-  imports: [CommonModule, FormsModule, ShareDocDialogComponent, QuillEditorComponent],
+  imports: [CommonModule, FormsModule, ShareDocDialogComponent, QuillEditorComponent, MonacoEditorComponent],
   templateUrl: './doc-edit.component.html',
   styleUrl: './doc-edit.component.scss'
 })
