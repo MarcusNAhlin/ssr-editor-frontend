@@ -22,7 +22,6 @@ export class DocEditComponent implements OnInit {
 
   document?: Document;
 
-  isCode = false; // render text editor(quill) or code editor(monaco)
   loading = true;
   saving = false;
   showShare = false;
@@ -61,8 +60,6 @@ export class DocEditComponent implements OnInit {
 
       return;
     }
-
-    console.log(this.document);
 
     this.api.editDocument({
       _id: this.document?._id,
