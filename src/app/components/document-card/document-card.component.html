@@ -1,4 +1,16 @@
-<div *ngIf="document" class="document">
-  <h3>{{ document.title || 'ID: ' + document._id }}</h3>
-  <a routerLink="/doc/{{ document._id }}" class="document-link">&#8618;</a>
-</div>
+<a *ngIf="document" class="document" [routerLink]="['/doc', document._id]">
+  <div class="doc-hero">
+    <lucide-icon class="doc-icon" name="File" aria-hidden="true"></lucide-icon>
+
+    <span *ngIf="(document.sharedWith?.length || 0) > 0" class="shared-badge"
+      aria-label="Shared">
+      <lucide-icon name="Users" [size]="16" aria-hidden="true"></lucide-icon>
+      <span class="count" *ngIf="document.sharedWith!.length > 1">{{ document.sharedWith!.length }}</span>
+    </span>
+  </div>
+
+  <div class="document-info">
+    <h3 class="title">{{ document.title || ('ID: ' + document._id) }}</h3>
+    <span class="chevron" aria-hidden="true">↪</span>
+  </div>
+</a>
