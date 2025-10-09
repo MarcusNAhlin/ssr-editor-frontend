@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "@ng-util/monaco-editor": "^20.1.0",
     "monaco-editor": "^0.54.0",
     "quill": "^2.0.3",
     "quill-cursors": "^4.0.4",
