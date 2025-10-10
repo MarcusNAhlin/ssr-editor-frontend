@@ -43,6 +43,7 @@ export class MonacoEditorComponent implements OnDestroy {
       try {
         // test if this.editor is of type IStandaloneCodeEditor
         // y-monaco doesn't support IStandaloneDiffEditor
+        //
         (this.editor as monaco.editor.IStandaloneCodeEditor).getModel();
       } catch {
         console.warn('IStandaloneDiffEditor is not supported by y-monaco');
