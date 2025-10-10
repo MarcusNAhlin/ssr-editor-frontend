@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { DocumentCardComponent } from './document-card.component';
+import { LucideAngularModule, File, Users } from 'lucide-angular';
 
 const mockDocument = {
   _id: '123',
@@ -14,7 +15,7 @@ describe('DocumentCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DocumentCardComponent],
+      imports: [DocumentCardComponent, LucideAngularModule.pick({ File, Users })],
       providers: [provideRouter([])]
     }).compileComponents();
 

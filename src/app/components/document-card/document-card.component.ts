@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Document } from '../../types/document';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-document-card',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, LucideAngularModule],
   templateUrl: './document-card.component.html',
   styleUrl: './document-card.component.scss'
 })
