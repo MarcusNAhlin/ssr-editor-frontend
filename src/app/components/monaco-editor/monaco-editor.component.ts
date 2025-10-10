@@ -7,6 +7,7 @@ import { MonacoBinding } from 'y-monaco';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-monaco-editor',
@@ -53,7 +54,7 @@ export class MonacoEditorComponent implements OnDestroy {
       this.editor.updateOptions({ readOnly: true });
 
       this.provider = new WebsocketProvider(
-        'ws://localhost:3000', // TODO: should be taken from env
+        environment.API_WS_URL,
         this.docId,
         this.yDoc
       );

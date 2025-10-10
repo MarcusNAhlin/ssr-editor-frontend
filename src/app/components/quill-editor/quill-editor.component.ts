@@ -5,6 +5,7 @@ import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 import { QuillBinding } from 'y-quill';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 
 Quill.register('modules/cursors', QuillCursors);
 
@@ -42,7 +43,7 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
 
     this.ydoc = new Y.Doc();
     this.provider = new WebsocketProvider(
-      'ws://localhost:3000',
+      environment.API_WS_URL,
       this.docId,
       this.ydoc
     );
