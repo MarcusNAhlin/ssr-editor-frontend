@@ -2,7 +2,7 @@ name: Deploy Angular to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [feature/code-editor-monaco]
 
 permissions:
   contents: write
