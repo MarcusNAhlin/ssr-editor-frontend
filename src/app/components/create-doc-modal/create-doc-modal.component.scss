@@ -1,0 +1,31 @@
+@use 'sass:color';
+@use '../../../styles/variables.scss' as *;
+
+.create-form {
+  display: grid;
+  gap: 12px;
+}
+
+.create-form > label {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.create-form > label > span {
+  font-size: .95rem;
+  opacity: .9;
+}
+
+.create-form .error {
+  color: $error;
+  font-size: .9rem;
+  margin: -2px 0 0; 
+}
+
+.create-form [modal-actions] {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}

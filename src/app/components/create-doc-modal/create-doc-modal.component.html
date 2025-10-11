@@ -1,0 +1,31 @@
+<app-modal [open]="open" [title]="'Create document'" (closeModal)="onCancel()">
+  <form class="create-form" (ngSubmit)="submitForm()" novalidate>
+    <label>
+      <span>Title</span>
+      <input #titleInput class="form-field" name="title" [(ngModel)]="title" placeholder="Untitled document" required />
+    </label>
+
+    <fieldset class="type-fieldset">
+      <legend>Type</legend>
+      <label class="radio">
+        <input type="radio" name="type" [(ngModel)]="type" value="richtext" required />
+        <span>Rich text</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="type" [(ngModel)]="type" value="code" />
+        <span>Code</span>
+      </label>
+    </fieldset>
+
+    <div class="error" *ngIf="submitted && !title.trim()">Enter a title.</div>
+    <div class="error" *ngIf="submitted && !type">Choose a type.</div>
+    <div class="error" *ngIf="serverError" aria-live="polite">{{ serverError }}</div>
+
+    <div modal-actions>
+      <button type="button" class="button" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="button-primary" [disabled]="!canSubmit">
+        {{ pending ? 'Creating…' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</app-modal>
