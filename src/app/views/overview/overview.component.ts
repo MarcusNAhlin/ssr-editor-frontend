@@ -5,19 +5,24 @@ import { DocumentCardComponent } from '../../components/document-card/document-c
 import { DocumentAddFormComponent } from '../../components/document-add-form/document-add-form.component';
 import { ApiService } from '../../services/api.service';
 import { Document } from '../../types/document';
+import { Router } from '@angular/router';
+import { CreateDocModalComponent } from '../../components/create-doc-modal/create-doc-modal.component';
+import { LucideAngularModule } from 'lucide-angular';
+
 
 @Component({
   selector: 'app-overview',
-  imports: [CommonModule, FormsModule, DocumentCardComponent, DocumentAddFormComponent],
+  imports: [CommonModule, FormsModule, DocumentCardComponent, DocumentAddFormComponent, CreateDocModalComponent, LucideAngularModule],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
 export class OverviewComponent implements OnInit {
   private api = inject(ApiService);
+  private router = inject(Router);
 
   documents: Document[] = [];
   addedDocument: Document | undefined = undefined;
-
+  showCreate = false;
   title = '';
   loading = false;
   error?: string;
@@ -50,5 +55,9 @@ export class OverviewComponent implements OnInit {
         console.error('Failed to fetch documents:', err);
       }
     });
+  }
+  onCreated(doc: { _id: string; type: 'richtext'|'code'; title: string; language?: string }) {
+    this.showCreate = false;
+    this.router.navigate(['/doc', doc._id]);
   }
 }

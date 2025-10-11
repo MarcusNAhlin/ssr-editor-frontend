@@ -5,6 +5,7 @@ import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 import { QuillBinding } from 'y-quill';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 
 Quill.register('modules/cursors', QuillCursors);
 
@@ -25,7 +26,7 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
   private provider!: WebsocketProvider;
   private yText!: Y.Text;
   private binding!: QuillBinding;
-  readonly userEmail = computed(() => this.auth.user()?.email ?? 'Annon');
+  readonly userEmail = computed(() => this.auth.user()?.email ?? 'Anon');
 
   ngAfterViewInit() {
     this.quill = new Quill(this.host.nativeElement, {
@@ -42,7 +43,7 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
 
     this.ydoc = new Y.Doc();
     this.provider = new WebsocketProvider(
-      'ws://localhost:3000',
+      environment.API_WS_URL,
       this.docId,
       this.ydoc
     );
@@ -55,7 +56,7 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
 
     this.provider.awareness.setLocalStateField('user', {
       name: this.userEmail(),
-      color: '#4A6A8A'
+      color: '#d9ff00ff'
     });
 
     this.yText = this.ydoc.getText('rich');
