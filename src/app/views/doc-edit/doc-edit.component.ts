@@ -6,12 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { Document } from '../../types/document';
 
 import { ShareDocDialogComponent } from '../../components/share-doc-dialog/share-doc-dialog.component';
-import { NuMonacoEditorModule } from '@ng-util/monaco-editor';
 import { MonacoEditorComponent } from '../../components/monaco-editor/monaco-editor.component';
+import { QuillEditorComponent } from '../../components/quill-editor/quill-editor.component';
 
 @Component({
   selector: 'app-doc-edit',
-  imports: [CommonModule, FormsModule, ShareDocDialogComponent, NuMonacoEditorModule, MonacoEditorComponent],
+  imports: [CommonModule, FormsModule, ShareDocDialogComponent, MonacoEditorComponent, QuillEditorComponent],
   templateUrl: './doc-edit.component.html',
   styleUrl: './doc-edit.component.scss'
 })
@@ -66,6 +66,7 @@ export class DocEditComponent implements OnInit {
       _id: this.document?._id,
       title: this.document?.title,
       content: this.document?.content,
+      type: this.document?.type,
     }).subscribe({
       next: (data: Document) => {
         console.log('Successfully edited document:', data);
