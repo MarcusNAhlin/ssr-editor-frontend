@@ -28,7 +28,8 @@
         <button class="button" type="button" (click)="showShare = true" [disabled]="!document._id">
           Share
         </button>
-        <button type="submit" [disabled]="loading" class="button-primary save-button">Save</button>
+        <!-- <button type="submit" [disabled]="loading" class="button-primary save-button">Save</button> -->
+        <button *ngIf="document.type === 'code'" type="submit" [disabled]="loading" class="button-primary save-button">Run Code</button>
       </div>
     </form>
 
