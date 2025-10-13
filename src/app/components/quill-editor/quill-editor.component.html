@@ -1,1 +1,16 @@
 <div #host class="quill-container" style="min-height:300px"></div>
+
+<form action="" (submit)="$event.preventDefault()">
+  <input type="text" #commentInput placeholder="Enter comment" />
+  <button type="button" (click)="addComment(commentInput.value)">Add comment</button>
+</form>
+
+
+<div class="comments-section">
+  <h3>Comments</h3>
+  <ul>
+    <li *ngFor="let comment of comments">{{ comment[1].get('timestamp') | date:"medium" }} - {{ comment[1].get('author') }} - {{ comment[1].get('text') }}
+      <button (click)="removeComment(comment[0])">Remove</button>
+    </li>
+  </ul>
+</div>

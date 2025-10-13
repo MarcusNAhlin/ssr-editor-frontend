@@ -6,11 +6,14 @@ import { WebsocketProvider } from 'y-websocket';
 import { QuillBinding } from 'y-quill';
 import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
+import { CommonModule } from '@angular/common';
+// import { Comment } from '../../types/comment';
 
 Quill.register('modules/cursors', QuillCursors);
 
 @Component({
   selector: 'app-quill-editor',
+  imports: [CommonModule],
   standalone: true,
   templateUrl: './quill-editor.component.html',
   styleUrl: './quill-editor.component.scss'
@@ -23,8 +26,9 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
 
   private quill!: Quill;
   private ydoc!: Y.Doc;
-  private provider!: WebsocketProvider;
   private yText!: Y.Text;
+  public comments!: Y.Map<any>;
+  private provider!: WebsocketProvider;
   private binding!: QuillBinding;
   readonly userEmail = computed(() => this.auth.user()?.email ?? 'Anon');
 
@@ -60,11 +64,29 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
     });
 
     this.yText = this.ydoc.getText('rich');
+    this.comments = this.ydoc.getMap('comments');
+
     this.binding = new QuillBinding(this.yText, this.quill, this.provider.awareness);
   }
 
   getHtml(): string { return this.quill.root.innerHTML; }
   getPlain(): string { return this.yText.toString(); }
+
+  addComment(commentText: string) {
+    const commentId = crypto.randomUUID();
+    const comment = new Y.Map();
+    comment.set('id', commentId);
+    comment.set('text', commentText);
+    comment.set('author', this.userEmail());
+    comment.set('timestamp', Date.now());
+    comment.set('resolved', false);
+
+    this.comments.set(commentId, comment);
+  }
+
+  removeComment(commentId: string) {
+    this.comments.delete(commentId);
+  }
 
   ngOnDestroy() {
     this.host.nativeElement.innerHTML = '';
