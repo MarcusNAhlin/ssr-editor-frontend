@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +20,8 @@ export class DocEditComponent implements OnInit {
   private api = inject(ApiService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+
+  @ViewChild('monacoEditor') monacoEditor?: MonacoEditorComponent;
 
   document?: Document;
 
@@ -49,40 +51,40 @@ export class DocEditComponent implements OnInit {
     });
   }
 
-  saveDocument() {
-    this.loading = true;
-    this.saving = true;
-    this.error = '';
+  // saveDocument() {
+  //   this.loading = true;
+  //   this.saving = true;
+  //   this.error = '';
 
-    if (!this.document?.title || !this.document.content) {
-      this.loading = false;
-      this.saving = false;
-      this.error = 'Missing title or content';
+  //   if (!this.document?.title || !this.document.content) {
+  //     this.loading = false;
+  //     this.saving = false;
+  //     this.error = 'Missing title or content';
 
-      return;
-    }
+  //     return;
+  //   }
 
-    this.api.editDocument({
-      _id: this.document?._id,
-      title: this.document?.title,
-      content: this.document?.content,
-      type: this.document?.type,
-    }).subscribe({
-      next: (data: Document) => {
-        console.log('Successfully edited document:', data);
+  //   this.api.editDocument({
+  //     _id: this.document?._id,
+  //     title: this.document?.title,
+  //     content: this.document?.content,
+  //     type: this.document?.type,
+  //   }).subscribe({
+  //     next: (data: Document) => {
+  //       console.log('Successfully edited document:', data);
 
-        this.loading = false;
-        this.saving = false;
-      },
-      error: (err) => {
-        this.error = 'Failed to edit document';
-        this.loading = false;
-        this.saving = false;
+  //       this.loading = false;
+  //       this.saving = false;
+  //     },
+  //     error: (err) => {
+  //       this.error = 'Failed to edit document';
+  //       this.loading = false;
+  //       this.saving = false;
 
-        console.error('Failed to edit document:', err);
-      }
-    });
-  }
+  //       console.error('Failed to edit document:', err);
+  //     }
+  //   });
+  // }
 
   deleteDocument() {
     this.loading = true;
@@ -117,5 +119,33 @@ export class DocEditComponent implements OnInit {
 
       this.router.navigate(['/']);
     }
+  }
+
+  runCode() {
+    this.loading = true;
+    this.error = '';
+
+    const code = this.monacoEditor?.getValue();
+    if (!code) {
+      this.loading = false;
+      this.error = 'Missing content';
+      return;
+    }
+
+    this.api.runCode(code).subscribe({
+      next: (data: { data: string }) => {
+        console.log('Successfully ran code');
+        const readableCodeOutput = atob(data.data);
+
+        alert(`Code output:\n--------------------------\n${readableCodeOutput}`);
+        this.loading = false;
+      },
+      error: (e: Error) => {
+        this.error = 'Failed to run code';
+        this.loading = false;
+
+        console.error('Failed to run code:', e);
+      }
+    });
   }
 }

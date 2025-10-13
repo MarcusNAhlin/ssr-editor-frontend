@@ -11,6 +11,7 @@ import { Share } from '../types/share';
 })
 export class ApiService {
   private apiURL = environment.API_URL;
+  private codeAPIURL = environment.CODE_API_URL;
   private http = inject(HttpClient);
 
   getDocuments(): Observable<Document[]> {
@@ -47,6 +48,20 @@ export class ApiService {
     return this.http.post<Share>(this.apiURL + '/docs/' + _id + '/share', userData).pipe(
       catchError(this.handleError)
     );;
+  }
+
+  runCode(code: string): Observable<{data: string}> {
+    const formattedCode = btoa(code);
+
+    return this.http.post<{data: string}>(
+      this.codeAPIURL,
+      JSON.stringify({ code: formattedCode }),
+      {
+        headers: { 'X-Skip-Auth': 'true', 'Content-Type': 'application/json' }
+      }
+    ).pipe(
+      catchError(this.handleError)
+    );
   }
 
   private handleError(error: HttpErrorResponse) {

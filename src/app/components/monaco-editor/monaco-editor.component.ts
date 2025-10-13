@@ -78,9 +78,22 @@ export class MonacoEditorComponent implements OnDestroy {
     }
   }
 
+  getValue(): string {
+    // Get value of editor content
+    return this.yDoc.getText('monaco-content').toString();
+  }
+
   ngOnDestroy(): void {
-    this.provider?.destroy();
-    this.binding?.destroy();
-    this.yDoc.destroy();
+    if (this.binding) {
+      this.binding.destroy();
+      this.binding = undefined;
+    }
+    if (this.provider) {
+      this.provider.destroy();
+      this.provider = undefined;
+    }
+    if (this.yDoc) {
+      this.yDoc.destroy();
+    }
   }
 }
