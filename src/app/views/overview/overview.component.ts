@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DocumentCardComponent } from '../../components/document-card/document-card.component';
-import { DocumentAddFormComponent } from '../../components/document-add-form/document-add-form.component';
 import { ApiService } from '../../services/api.service';
 import { Document } from '../../types/document';
 import { Router } from '@angular/router';
@@ -12,7 +11,7 @@ import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-overview',
-  imports: [CommonModule, FormsModule, DocumentCardComponent, DocumentAddFormComponent, CreateDocModalComponent, LucideAngularModule],
+  imports: [CommonModule, FormsModule, DocumentCardComponent, CreateDocModalComponent, LucideAngularModule],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
