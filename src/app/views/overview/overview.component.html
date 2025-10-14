@@ -1,14 +1,18 @@
 <main>
   <h2>Documents</h2>
 
-  <app-document-add-form
-    (loadingChange)="onLoadingChange($event)"
-    (errorChange)="onErrorChange($event)"
-  />
-
   <div class="document-holder">
+    <button class="add-button" type="button" (click)="showCreate = true">
+      <div class="doc-hero">
+        <lucide-icon class="doc-add-icon" name="Plus" aria-hidden="true"></lucide-icon>
+        Create Document
+      </div>
+    </button>
     <div *ngFor="let document of documents" class="document">
       <app-document-card [document]="document" />
     </div>
   </div>
+
+  <app-create-doc-modal [open]="showCreate" (closed)="showCreate = false">
+  </app-create-doc-modal>
 </main>

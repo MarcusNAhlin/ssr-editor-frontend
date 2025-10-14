@@ -9,8 +9,52 @@ a {
   color: $text-primary;
 }
 
+// .add-button {
+//   color: $highlight;
+// }
+
 .add-button {
-  color: $highlight;
+  width: 200px;
+  height: 330px;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  background: $bg-elevated;
+  border: 1px solid $bg-elevated;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  text-decoration: none;
+  color: $text-primary;
+
+  &:hover {
+    border-color: $highlight;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .22);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $highlight;
+    outline-offset: 2px;
+  }
+}
+
+.doc-hero {
+  border-radius: 0.4rem;
+  background: $bg-primary;
+  border: 1px solid $border;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 .document-holder {

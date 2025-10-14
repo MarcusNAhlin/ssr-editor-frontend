@@ -18,3 +18,54 @@
 .form-field:focus {
   outline: none;
 }
+
+.type-fieldset {
+  border: 1px solid $border;
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  background: $bg-elevated;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+
+  legend {
+    padding: 0 0.35rem;
+    color: $text-secondary;
+    font-size: 0.9rem;
+  }
+}
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: $text-primary;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+
+  input[type='radio'] {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid $border;
+    border-radius: 50%;
+    background: $bg-primary;
+    margin: 0;
+
+    &:focus-visible {
+      outline: 2px solid $highlight;
+      outline-offset: 2px;
+    }
+
+    &:checked {
+      border-color: $highlight;
+      background: radial-gradient($highlight 50%, transparent 51%);
+    }
+  }
+
+  span {
+    user-select: none;
+  }
+}

@@ -26,6 +26,7 @@ export class DocumentAddFormComponent {
     this.api.addDocument({
       title: this.title,
       content: ' ',
+      type:'richtext'
     }).subscribe({
       next: (data: Document) => {
         console.log('Successfully added document:', data);

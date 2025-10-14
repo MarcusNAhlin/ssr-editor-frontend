@@ -10,6 +10,11 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req.clone({ withCredentials: true }));
     }
 
+    // If request has header 'X-Skip-Auth', don't add Authorization header
+    if (req.headers.has('X-Skip-Auth')) {
+      return next.handle(req);
+    }
+
     const accessToken = localStorage.getItem(TOKEN_KEY);
     let authReq = req.clone({
       withCredentials: true
