@@ -7,7 +7,7 @@ import { QuillBinding } from 'y-quill';
 import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
-import { Comment, QuillCursorsModule } from '../../types/comment';
+import { QuillCursorsModule } from '../../types/comment';
 
 Quill.register('modules/cursors', QuillCursors);
 
@@ -27,6 +27,7 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
   private quill!: Quill;
   private ydoc!: Y.Doc;
   private yText!: Y.Text;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public comments!: Y.Map<any>;
   private provider!: WebsocketProvider;
   private binding!: QuillBinding;

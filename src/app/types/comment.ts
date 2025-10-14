@@ -1,10 +1,11 @@
 export interface Comment {
   id: string;
-  line: number;
   text: string;
   author: string;
   timestamp: number;
   resolved: boolean;
+  relativePos?: Uint8Array;
+  selectionLength?: number;
 }
 
 export interface QuillCursorsModule {
