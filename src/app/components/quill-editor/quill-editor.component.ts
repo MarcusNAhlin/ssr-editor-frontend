@@ -155,13 +155,11 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   private _removeCommentHighlight(commentId: string) {
-    console.log('removeCommentHighlight', commentId);
     const cursors = this._getCursorsModule();
     cursors.removeCursor(commentId);
   }
 
   private _applyCommentHighlight(commentId: string) {
-    console.log('applyCommentHighlight', commentId);
     const comment = this.comments.get(commentId);
     if (!comment) return;
 
