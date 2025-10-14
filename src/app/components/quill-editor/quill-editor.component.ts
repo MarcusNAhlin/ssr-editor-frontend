@@ -6,11 +6,14 @@ import { WebsocketProvider } from 'y-websocket';
 import { QuillBinding } from 'y-quill';
 import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
+import { CommonModule } from '@angular/common';
+import { QuillCursorsModule } from '../../types/comment';
 
 Quill.register('modules/cursors', QuillCursors);
 
 @Component({
   selector: 'app-quill-editor',
+  imports: [CommonModule],
   standalone: true,
   templateUrl: './quill-editor.component.html',
   styleUrl: './quill-editor.component.scss'
@@ -23,10 +26,13 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
 
   private quill!: Quill;
   private ydoc!: Y.Doc;
-  private provider!: WebsocketProvider;
   private yText!: Y.Text;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public comments!: Y.Map<any>;
+  private provider!: WebsocketProvider;
   private binding!: QuillBinding;
   readonly userEmail = computed(() => this.auth.user()?.email ?? 'Anon');
+  public activeCommentId: string | null = null;
 
   ngAfterViewInit() {
     this.quill = new Quill(this.host.nativeElement, {
@@ -60,13 +66,116 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
     });
 
     this.yText = this.ydoc.getText('rich');
+    this.comments = this.ydoc.getMap('comments');
+
     this.binding = new QuillBinding(this.yText, this.quill, this.provider.awareness);
   }
 
   getHtml(): string { return this.quill.root.innerHTML; }
   getPlain(): string { return this.yText.toString(); }
 
+  addComment(commentInputElement: HTMLInputElement) {
+    const commentId = crypto.randomUUID();
+    const comment = new Y.Map();
+
+    comment.set('id', commentId);
+    comment.set('text', commentInputElement.value);
+    comment.set('author', this.userEmail());
+    comment.set('timestamp', Date.now());
+    comment.set('resolved', false); // TODO: Add ability to resolve comments (instead of delete)
+
+    const selection = this.quill.getSelection();
+    if (selection) {
+      // Get a relative position from the currently selected text
+      const relativePos = Y.createRelativePositionFromTypeIndex(this.yText, selection.index);
+      // Need to encode position to be able to store in in a Yjs map
+      const encodedRelativePos = Y.encodeRelativePosition(relativePos);
+      comment.set('relativePos', encodedRelativePos);
+      comment.set('selectionLength', selection.length);
+    }
+
+    this.comments.set(commentId, comment);
+
+    commentInputElement.value = '';
+  }
+
+  selectTextInComment(commentId: string) {
+    this._updateCommentHighlight(commentId);
+  }
+
+  removeComment(commentId: string) {
+    const comment = this.comments.get(commentId);
+
+    if (!comment) {
+      console.warn('Comment not found:', commentId);
+      return;
+    }
+
+    // Open a browser confirm dialog
+    // TODO: Replace with own modal
+    if (!confirm(`Are you sure you want to remove comment: "${comment.get('text')}"`)) {
+      return;
+    }
+
+    this.activeCommentId = commentId;
+    this._updateCommentHighlight(commentId);
+    this.comments.delete(commentId);
+  }
+
   ngOnDestroy() {
+    this.provider?.destroy();
+    this.ydoc?.destroy();
     this.host.nativeElement.innerHTML = '';
+  }
+
+  private _updateCommentHighlight(commentId: string) {
+    const comment = this.comments.get(commentId);
+
+    if (!comment) {
+      console.warn('No comment found for activeCommentId:', this.activeCommentId);
+      return;
+    }
+
+    if (this.activeCommentId === commentId) {
+      this._removeCommentHighlight(commentId);
+      this.activeCommentId = null;
+      return;
+    }
+
+    if (this.activeCommentId !== commentId) {
+      if (this.activeCommentId) this._removeCommentHighlight(this.activeCommentId);
+
+      this._applyCommentHighlight(commentId);
+      this.activeCommentId = commentId;
+    }
+  }
+
+  private _getCursorsModule() {
+    return this.quill.getModule('cursors') as QuillCursorsModule;
+  }
+
+  private _removeCommentHighlight(commentId: string) {
+    const cursors = this._getCursorsModule();
+    cursors.removeCursor(commentId);
+  }
+
+  private _applyCommentHighlight(commentId: string) {
+    const comment = this.comments.get(commentId);
+    if (!comment) return;
+
+    const encodedRelativePos = comment.get('relativePos');
+    if (!encodedRelativePos) return;
+
+    const relativePos = Y.decodeRelativePosition(encodedRelativePos);
+    const absolutePos = Y.createAbsolutePositionFromRelativePosition(relativePos, this.ydoc);
+
+    if (absolutePos && absolutePos.type === this.yText) {
+      const index = absolutePos.index;
+      const length = comment.get('selectionLength');
+
+      const cursors = this._getCursorsModule();
+      cursors.createCursor(commentId, `Comment by - ${comment.get('author')} - ${new Date(comment.get('timestamp')).toLocaleString()}`, '#d9ff0063');
+      cursors.moveCursor(commentId, { index, length });
+    }
   }
 }

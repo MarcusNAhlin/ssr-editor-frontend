@@ -1,1 +1,30 @@
-<div #host class="quill-container" style="min-height:300px"></div>
+<div class="document-holder">
+  <div>
+    <div #host class="quill-container"></div>
+  </div>
+
+  <div class="comments-holder">
+    <form action="" (submit)="$event.preventDefault()">
+      <input type="text" class="form-field" #commentInput placeholder="Enter comment" />
+      <button type="button" class="comment-submit" (click)="addComment(commentInput)">Add comment</button>
+    </form>
+
+      <div class="comments">
+      <div>
+        <div *ngFor="let comment of comments"
+          class="comment"
+          [class.active]="comment[0] === activeCommentId"
+          (click)="selectTextInComment(comment[0])"
+            (keyup.enter)="selectTextInComment(comment[0])"
+            tabindex="0"
+            role="button"
+            [attr.aria-pressed]="comment[0] === activeCommentId">
+            <p class="comment-text">{{ comment[1].get('text') }}</p>
+            <p class="author">{{ comment[1].get('author') }}</p>
+            <p class="date">{{ comment[1].get('timestamp') | date:"medium" }}</p>
+          <button (click)="removeComment(comment[0])" class="comment-remove-btn">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,98 @@
+@use 'sass:color';
+@use '../../../styles/variables.scss' as *;
+@use '../../../styles/forms.scss' as *;
+
+.document-holder {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
 .quill-container {
-    height: 300px;
+    flex-direction: column !important;
+    min-height: 300px;
+    width: 70vw;
 }
 
 :host ::ng-deep .ql-container {
     height: 100%;
+}
+
+.comments-holder {
+    flex-direction: column;
+}
+
+.comment {
+    cursor: pointer;
+    border: 2px solid $border;
+    border-radius: 0.2rem;
+    padding: 1rem;
+    margin-top: 1rem;
+
+    &:hover {
+        outline: 1px solid $highlight;
+        background: color.adjust($highlight, $alpha: -0.9);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    }
+
+    .comment-text {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .author {
+        margin-bottom: 0.2rem;
+        font-size: 0.9rem;
+        color: $text-secondary;
+    }
+
+    .date {
+        color: $text-secondary;
+        font-size: 0.8rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .comment-remove-btn {
+        background-color: $error;
+        color: $bg-primary;
+        border: none;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.1rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+
+        &:hover {
+            background-color: color.adjust($error, $lightness: -20%);
+        }
+    }
+}
+
+.active {
+    outline: 2px solid $highlight;
+}
+
+.comment-submit {
+    color: $bg-primary;
+    background-color: $highlight;
+    outline: none;
+    border: none;
+    padding: 0.4rem 1rem;
+    font-size: 110%;
+    border-radius: 0.1rem;
+    transition: background-color 0.2s ease-in-out;
+
+    height: 100%;
+    padding: 0.6rem;
+
+    &:hover {
+        background-color: color.adjust($highlight, $lightness: -20%);
+        cursor: pointer;
+    }
+
+    &:active {
+        background-color: color.adjust($highlight, $lightness: -30%);
+        transform: scale(0.98);
+    }
 }
