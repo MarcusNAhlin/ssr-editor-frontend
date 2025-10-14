@@ -1,9 +1,13 @@
 <a *ngIf="document" class="document" routerLink="/doc/{{ document._id }}">
   <div class="doc-hero">
-    <lucide-icon class="doc-icon" name="File" aria-hidden="true"></lucide-icon>
 
-    <span *ngIf="(document.sharedWith?.length || 0) > 0" class="shared-badge"
-      aria-label="Shared">
+    <lucide-icon *ngIf="document.type === 'code'" [size]="40" class="doc-icon" name="FileCode" aria-hidden="true">
+    </lucide-icon>
+
+    <lucide-icon *ngIf="document.type === 'richtext'" [size]="40" class="doc-icon" name="FileText" aria-hidden="true">
+    </lucide-icon>
+
+    <span *ngIf="(document.sharedWith?.length || 0) > 0" class="shared-badge" aria-label="Shared">
       <lucide-icon name="Users" [size]="16" aria-hidden="true"></lucide-icon>
       <span class="count" *ngIf="document.sharedWith!.length > 1">{{ document.sharedWith!.length }}</span>
     </span>
