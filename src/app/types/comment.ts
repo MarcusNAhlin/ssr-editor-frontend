@@ -6,3 +6,9 @@ export interface Comment {
   timestamp: number;
   resolved: boolean;
 }
+
+export interface QuillCursorsModule {
+  createCursor: (id: string, name: string, color: string) => void;
+  moveCursor: (id: string, range: { index: number; length: number }) => void;
+  removeCursor: (id: string) => void;
+}

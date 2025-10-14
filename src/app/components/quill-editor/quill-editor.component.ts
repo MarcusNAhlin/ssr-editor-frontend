@@ -7,7 +7,7 @@ import { QuillBinding } from 'y-quill';
 import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
-// import { Comment } from '../../types/comment';
+import { Comment, QuillCursorsModule } from '../../types/comment';
 
 Quill.register('modules/cursors', QuillCursors);
 
@@ -150,13 +150,13 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   private _getCursorsModule() {
-    return this.quill.getModule('cursors');
+    return this.quill.getModule('cursors') as QuillCursorsModule;
   }
 
   private _removeCommentHighlight(commentId: string) {
     console.log('removeCommentHighlight', commentId);
     const cursors = this._getCursorsModule();
-    (cursors as any).removeCursor(commentId);
+    cursors.removeCursor(commentId);
   }
 
   private _applyCommentHighlight(commentId: string) {
@@ -175,8 +175,8 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
       const length = comment.get('selectionLength');
 
       const cursors = this._getCursorsModule();
-      (cursors as any).createCursor(commentId, `Comment by - ${comment.get('author')} - ${new Date(comment.get('timestamp')).toLocaleString()}`, '#d9ff0063');
-      (cursors as any).moveCursor(commentId, { index, length });
+      cursors.createCursor(commentId, `Comment by - ${comment.get('author')} - ${new Date(comment.get('timestamp')).toLocaleString()}`, '#d9ff0063');
+      cursors.moveCursor(commentId, { index, length });
     }
   }
 }
