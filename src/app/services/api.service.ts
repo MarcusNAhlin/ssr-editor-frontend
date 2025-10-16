@@ -1,18 +1,23 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, computed } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Document } from '../types/document';
 import { Share } from '../types/share';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  private auth = inject(AuthService);
   private apiURL = environment.API_URL;
   private codeAPIURL = environment.CODE_API_URL;
   private http = inject(HttpClient);
+
+  userId = computed(() => this.auth.user()?._id ?? '');
+
 
   getDocuments(): Observable<Document[]> {
     return this.http.get<Document[]>(this.apiURL + '/docs').pipe(
@@ -21,9 +26,13 @@ export class ApiService {
   }
 
   getDocument(_id: string): Observable<Document> {
-    return this.http.get<Document>(this.apiURL + `/docs/${_id}`).pipe(
+    const res = this.http.post<Document>(this.apiURL + '/graphql',JSON.stringify({ query: `{ document( id: ${_id}, _id: ${this.userId()} ) {_id, type} }` }), { headers: { 'Content-Type': 'application/json' } }).pipe(
       catchError(this.handleError)
     );;
+    console.log(this.userId());
+    console.log(_id);
+    console.log(res);
+    return res;
   }
 
   addDocument(documentData: Document): Observable<Document> {

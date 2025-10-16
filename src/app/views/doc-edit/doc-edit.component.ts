@@ -37,7 +37,8 @@ export class DocEditComponent implements OnInit {
       this.loading = false;
       return;
     }
-    this.getDocument(id);
+    const res = this.getDocument(id);
+    console.log(res);
   }
 
   getDocument(id: string): void {
