@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, computed } from '@angular/core';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Document } from '../types/document';
 import { Share } from '../types/share';
@@ -20,18 +20,29 @@ export class ApiService {
 
 
   getDocuments(): Observable<Document[]> {
-    return this.http.get<Document[]>(this.apiURL + '/docs').pipe(
+    const res = this.http.post<any>(this.apiURL + '/graphql',JSON.stringify({ query: `{ documents(_id: "${this.userId()}" ) {_id, owner, type, title, sharedWith {id, email}, title} }` }), { headers: { 'Content-Type': 'application/json' } }).pipe(
+      map(res => {
+        // if (res.errors?.length) {
+        //   throw new Error(res.errors.map(e => e.message).join('; '));
+        // }
+        console.log(res.data);
+        return res.data.documents;
+      }),
       catchError(this.handleError)
     );;
+    return res;
   }
 
-  getDocument(_id: string): Observable<Document> {
-    const res = this.http.post<Document>(this.apiURL + '/graphql',JSON.stringify({ query: `{ document( id: ${_id}, _id: ${this.userId()} ) {_id, type} }` }), { headers: { 'Content-Type': 'application/json' } }).pipe(
+  getDocument(_id: string): Observable<any> {
+    const res = this.http.post<any>(this.apiURL + '/graphql',JSON.stringify({ query: `{ document( id: "${_id}", _id: "${this.userId()}" ) {_id, owner, type, title, sharedWith {id, email}, title} }` }), { headers: { 'Content-Type': 'application/json' } }).pipe(
+      map(res => {
+        // if (res.errors?.length) {
+        //   throw new Error(res.errors.map(e => e.message).join('; '));
+        // }
+        return res.data.document;
+      }),
       catchError(this.handleError)
     );;
-    console.log(this.userId());
-    console.log(_id);
-    console.log(res);
     return res;
   }
 
