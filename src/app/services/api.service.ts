@@ -7,16 +7,6 @@ import { Document, GqlResDoc, GqlResDocs } from '../types/document';
 import { Share } from '../types/share';
 import { AuthService } from './auth.service';
 
-const DOCUMENT_FIELDS = `
-  fragment DocumentFields on Document {
-    _id
-    owner
-    type
-    title
-    sharedWith { id email }
-  }
-`;
-
 @Injectable({
   providedIn: 'root'
 })
@@ -30,14 +20,16 @@ export class ApiService {
 
   getDocuments(): Observable<Document[]> {
     const QUERY = `
-      ${DOCUMENT_FIELDS}
       query Documents($userId: ID!) {
         documents(_id: $userId) {
-          ...DocumentFields
+          _id
+          owner
+          type
+          title
+          sharedWith { id email }
         }
       }
     `;
-
     const userId = this.userId();
     
     if (!userId) {
@@ -58,10 +50,13 @@ export class ApiService {
 
   getDocument(_id: string): Observable<Document> {
     const QUERY = `
-      ${DOCUMENT_FIELDS}
       query Document($id: ID!, $userId: ID!) {
         document(id: $id, _id: $userId) {
-          ...DocumentFields
+          _id
+          owner
+          type
+          title
+          sharedWith { id email }
         }
       }
     `;
