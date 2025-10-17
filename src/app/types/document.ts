@@ -7,3 +7,13 @@ export interface Document {
   owner?: string,
   sharedWith?: User[],
 }
+
+export interface GqlResDoc { 
+  data: { document: Document },
+   errors?: { message: string }[]
+}
+
+export interface GqlResDocs {
+  data: { documents: Document[] },
+   errors?: { message: string }[] 
+}
