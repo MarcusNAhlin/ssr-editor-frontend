@@ -1,29 +1,81 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, computed } from '@angular/core';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Document } from '../types/document';
+import { Document, GqlResDoc, GqlResDocs } from '../types/document';
 import { Share } from '../types/share';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  private auth = inject(AuthService);
   private apiURL = environment.API_URL;
   private codeAPIURL = environment.CODE_API_URL;
   private http = inject(HttpClient);
 
+  readonly userId = computed(() => this.auth.user()?._id ?? '');
+
   getDocuments(): Observable<Document[]> {
-    return this.http.get<Document[]>(this.apiURL + '/docs').pipe(
+    const QUERY = `
+      query Documents($userId: ID!) {
+        documents(_id: $userId) {
+          _id
+          owner
+          type
+          title
+          sharedWith { id email }
+        }
+      }
+    `;
+    const userId = this.userId();
+    
+    if (!userId) {
+      return throwError(() => new Error('No user is logged in.'));
+    }
+
+    return this.http.post<GqlResDocs>(
+      `${this.apiURL}/graphql`,
+      { query: QUERY, variables: { userId }, operationName: 'Documents' },
+      { headers: { 'Content-Type': 'application/json' } }
+    ).pipe(
+      map(res => {
+        return res.data.documents;
+      }),
       catchError(this.handleError)
-    );;
+    );
   }
 
   getDocument(_id: string): Observable<Document> {
-    return this.http.get<Document>(this.apiURL + `/docs/${_id}`).pipe(
+    const QUERY = `
+      query Document($id: ID!, $userId: ID!) {
+        document(id: $id, _id: $userId) {
+          _id
+          owner
+          type
+          title
+          sharedWith { id email }
+        }
+      }
+    `;
+    const userId = this.userId();
+
+    if (!userId) {
+      return throwError(() => new Error('No user is logged in.'));
+    }
+
+    return this.http.post<GqlResDoc>(
+      `${this.apiURL}/graphql`,
+      { query: QUERY, variables: { id: _id, userId }, operationName: 'Document' },
+      { headers: { 'Content-Type': 'application/json' } }
+    ).pipe(
+      map(res => {
+        return res.data.document;
+      }),
       catchError(this.handleError)
-    );;
+    );
   }
 
   addDocument(documentData: Document): Observable<Document> {
