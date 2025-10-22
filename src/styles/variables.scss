@@ -16,3 +16,34 @@ $success: #10B981;
 $warning: #F59E0B;
 $error: #EF4444;
 $info: #3B82F6;
+
+.spinner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.spinner-container::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 56px;
+  border: 6px solid $highlight;
+  border-top: 6px solid $bg-primary;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
