@@ -1,7 +1,5 @@
+<div *ngIf="loading" class="spinner-container"></div>
 <main>
-  <div *ngIf="loading">Loading...</div>
-
-
   <div *ngIf="!loading" class="edit-holder">
     <p class="error" *ngIf="error">{{ error }}</p>
 
