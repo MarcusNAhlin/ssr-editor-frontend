@@ -1,61 +1,47 @@
 <div *ngIf="loading()" class="spinner-container"></div>
 
-<div class="register-wrap">
-  <h1>Sign up</h1>
+<main>
+  <div class="register-wrap">
+    <h1>Sign up</h1>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-    <label>
-      <span>Email</span>
-      <input
-        type="email"
-        class="form-field"
-        formControlName="email"
-        placeholder="you@example.com"
-        autocomplete="email"
-        [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
-      />
-    </label>
-    <div class="error" *ngIf="form.controls.email.touched && form.controls.email.invalid">
-      {{ form.controls.email.hasError('required') ? 'Email is required' : 'Enter a valid email' }}
-    </div>
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label>
+        <span>Email</span>
+        <input type="email" class="form-field" formControlName="email" placeholder="you@example.com"
+          autocomplete="email" [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched" />
+      </label>
+      <div class="error" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+        {{ form.controls.email.hasError('required') ? 'Email is required' : 'Enter a valid email' }}
+      </div>
 
-    <label>
-      <span>Password</span>
-      <input
-        type="password"
-        class="form-field"
-        formControlName="password"
-        placeholder="Enter password"
-        autocomplete="new-password"
-      />
-    </label>
+      <label>
+        <span>Password</span>
+        <input type="password" class="form-field" formControlName="password" placeholder="Enter password"
+          autocomplete="new-password" />
+      </label>
 
-    <label>
-      <span>Confirm Password</span>
-      <input
-        type="password"
-        class="form-field"
-        formControlName="confirmPassword"
-        placeholder="Confirm password"
-        autocomplete="new-password"
-      />
-    </label>
+      <label>
+        <span>Confirm Password</span>
+        <input type="password" class="form-field" formControlName="confirmPassword" placeholder="Confirm password"
+          autocomplete="new-password" />
+      </label>
 
-    <div class="error" *ngIf="form.controls.password.touched && form.controls.password.invalid">
-      {{ form.controls.password.hasError('required') ? 'Password is required' : 'Min 6 characters' }}
-    </div>
-    <div class="error" *ngIf="form.touched && form.hasError('passwordsMismatch')">
-      Passwords do not match
-    </div>
+      <div class="error" *ngIf="form.controls.password.touched && form.controls.password.invalid">
+        {{ form.controls.password.hasError('required') ? 'Password is required' : 'Min 6 characters' }}
+      </div>
+      <div class="error" *ngIf="form.touched && form.hasError('passwordsMismatch')">
+        Passwords do not match
+      </div>
 
-    <button type="submit" class="button-primary" [disabled]="form.invalid || loading()">
-      {{ loading() ? 'Registering…' : 'Register' }}
-    </button>
+      <button type="submit" class="button-primary" [disabled]="form.invalid || loading()">
+        {{ loading() ? 'Registering…' : 'Register' }}
+      </button>
 
-    <p class="error" *ngIf="error()">{{ error() }}</p>
-  </form>
+      <p class="error" *ngIf="error()">{{ error() }}</p>
+    </form>
 
-  <p class="muted">
-    Already have an account? <a routerLink="/login">Login</a>
-  </p>
-</div>
+    <p class="muted">
+      Already have an account? <a routerLink="/login">Login</a>
+    </p>
+  </div>
+</main>
