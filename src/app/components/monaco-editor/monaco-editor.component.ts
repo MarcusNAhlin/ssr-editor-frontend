@@ -60,6 +60,8 @@ export class MonacoEditorComponent implements OnDestroy {
         this.yDoc
       );
 
+      this.provider.params = { access_token: this.auth.getToken() || '' };
+
       const yText = this.yDoc.getText('monaco-content');
 
       // this.provider.awareness.setLocalStateField('user', {
