@@ -54,6 +54,8 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
       this.ydoc
     );
 
+    this.provider.params = { access_token: this.auth.getToken() || '' };
+
     this.provider.on('sync', (isSynced: boolean) => {
       if (isSynced) {
         this.quill.enable(true);
