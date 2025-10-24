@@ -1,3 +1,6 @@
+<div>
+  <p>Status: {{ connectionStatus() }} {{ connectionError() ? `(${connectionError()})` : '' }}</p>
+</div>
 <nu-monaco-editor
   class="monaco-editor"
   [(ngModel)]="value"

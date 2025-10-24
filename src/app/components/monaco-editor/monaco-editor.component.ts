@@ -1,7 +1,7 @@
 import * as Y from 'yjs';
 import * as monaco from 'monaco-editor';
 import { NuMonacoEditorComponent, NuMonacoEditorEvent } from '@ng-util/monaco-editor';
-import { Component, computed, inject, Input, OnDestroy } from '@angular/core';
+import { Component, computed, inject, Input, OnDestroy, signal } from '@angular/core';
 import { WebsocketProvider } from 'y-websocket';
 import { MonacoBinding } from 'y-monaco';
 import { CommonModule } from '@angular/common';
@@ -36,6 +36,10 @@ export class MonacoEditorComponent implements OnDestroy {
   private binding?: MonacoBinding;
   readonly userEmail = computed(() => this.auth.user()?.email ?? 'Anon');
 
+  public connectionStatus = signal<'loading' | 'connected' | 'failed'>('loading');
+  public connectionError = signal<string | null>(null);
+  private retryCount = signal<number>(0);
+
   onEditorEvent(event: NuMonacoEditorEvent): void {
     if (event.type === 'init' && event.editor) {
       this.editor = event.editor as unknown as typeof this.editor;
@@ -57,17 +61,80 @@ export class MonacoEditorComponent implements OnDestroy {
       this.provider = new WebsocketProvider(
         environment.API_WS_URL,
         this.docId,
-        this.yDoc
+        this.yDoc,
+        {
+          maxBackoffTime: 10000,
+          connect: true,
+          params: { access_token: this.auth.getToken() || '' }
+        }
       );
 
-      this.provider.params = { access_token: this.auth.getToken() || '' };
-
       const yText = this.yDoc.getText('monaco-content');
+
+      const MAX_RETRIES = 5;
+      this.provider.on('status', (event: { status: string }) => {
+        if (event.status === 'connecting') {
+          this.connectionStatus.set('loading');
+          this.connectionError.set(null);
+          this.retryCount.set(this.retryCount() + 1);
+
+          if (this.retryCount() > MAX_RETRIES) {
+            try {
+              this.provider!.disconnect();
+            } catch (e: unknown) {
+              console.error('Error disconnecting provider: ', e);
+              this.ngOnDestroy();
+            }
+            this.connectionStatus.set('failed');
+            this.connectionError.set('Maximum connection attempts reached. Refresh the page to try again.');
+          }
+        }
+
+        if (event.status === 'connected') {
+          this.connectionStatus.set('connected');
+          this.connectionError.set(null);
+          this.retryCount.set(0);
+        }
+
+        if (event.status === 'disconnected') {
+          this.connectionStatus.set('failed');
+          this.connectionError.set('Disconnected');
+        }
+      });
+
+      this.provider.on('connection-close', (event) => {
+        if (!event) return;
+
+        // If unauthorized
+        if (event.code === 4001) {
+          try {
+            this.provider!.disconnect();
+          } catch (e: unknown) {
+            console.error('Error disconnecting provider: ', e);
+            this.ngOnDestroy();
+          }
+          this.connectionStatus.set('failed');
+          this.connectionError.set('Unauthorized. Try refreshing the page or log in again.');
+          this.editor?.updateOptions({ readOnly: true });
+        }
+
+        if (event.code !== 4001) {
+          this.connectionStatus.set('failed');
+          this.connectionError.set(`Connection closed: ${event.reason}`);
+          this.editor?.updateOptions({ readOnly: true });
+        }
+      });
 
       // this.provider.awareness.setLocalStateField('user', {
       //   name: this.userEmail(),
       //   color: '#d9ff00ff'
       // });
+
+      this.provider.on('sync', (isSynced: boolean) => {
+        if (isSynced) {
+          this.editor?.updateOptions({ readOnly: false });
+        }
+      });
 
       this.binding = new MonacoBinding(
         yText,
@@ -75,8 +142,6 @@ export class MonacoEditorComponent implements OnDestroy {
         new Set([this.editor]),
         this.provider.awareness,
       );
-
-      this.editor.updateOptions({ readOnly: false });
     }
   }
 

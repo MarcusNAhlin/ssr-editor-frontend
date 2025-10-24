@@ -1,3 +1,6 @@
+<div>
+  <p>Status: {{ connectionStatus() }} {{ connectionError() ? `(${connectionError()})` : '' }}</p>
+</div>
 <div class="document-holder">
   <div>
     <div #host class="quill-container"></div>
