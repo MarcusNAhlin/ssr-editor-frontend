@@ -69,17 +69,22 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    const MAX_RETRIES = 5;
+    const MAX_RETRIES = 3;
     this.provider.on('status', (event: { status: string }) => {
       if (event.status === 'connecting') {
         this.connectionStatus.set('loading');
         this.connectionError.set(null);
         this.retryCount.set(this.retryCount() + 1);
 
-        if (this.retryCount() > MAX_RETRIES) {
+        if (this.retryCount() >= MAX_RETRIES) {
           this.provider.disconnect();
           this.connectionStatus.set('failed');
-          this.connectionError.set('Maximum connection attempts reached. Refresh the page to try again.');
+          this.connectionError.set('Maximum connection attempts reached, refresh the page to try again');
+        }
+
+        if (this.retryCount() < MAX_RETRIES) {
+          this.connectionStatus.set('loading');
+          this.connectionError.set('Attempting to reconnect... (' + this.retryCount() + '/' + MAX_RETRIES + ')');
         }
       }
 
@@ -106,9 +111,14 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
         this.quill.enable(false);
       }
 
-      if (event.code !== 4001) {
+      if (event.code !== 4001 && this.retryCount() >= MAX_RETRIES) {
         this.connectionStatus.set('failed');
         this.connectionError.set(`Connection closed: ${event.reason}`);
+        this.quill.enable(false);
+      }
+
+      if (event.code !== 4001 && this.retryCount() < MAX_RETRIES) {
+        this.connectionStatus.set('loading');
         this.quill.enable(false);
       }
     });

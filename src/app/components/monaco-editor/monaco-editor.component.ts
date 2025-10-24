@@ -71,14 +71,14 @@ export class MonacoEditorComponent implements OnDestroy {
 
       const yText = this.yDoc.getText('monaco-content');
 
-      const MAX_RETRIES = 5;
+      const MAX_RETRIES = 3;
       this.provider.on('status', (event: { status: string }) => {
         if (event.status === 'connecting') {
           this.connectionStatus.set('loading');
           this.connectionError.set(null);
           this.retryCount.set(this.retryCount() + 1);
 
-          if (this.retryCount() > MAX_RETRIES) {
+          if (this.retryCount() >= MAX_RETRIES) {
             try {
               this.provider!.disconnect();
             } catch (e: unknown) {
@@ -86,7 +86,12 @@ export class MonacoEditorComponent implements OnDestroy {
               this.ngOnDestroy();
             }
             this.connectionStatus.set('failed');
-            this.connectionError.set('Maximum connection attempts reached. Refresh the page to try again.');
+            this.connectionError.set('Maximum connection attempts reached, refresh the page to try again');
+          }
+
+          if (this.retryCount() < MAX_RETRIES) {
+            this.connectionStatus.set('loading');
+            this.connectionError.set('Attempting to reconnect... (' + this.retryCount() + '/' + MAX_RETRIES + ')');
           }
         }
 
@@ -118,9 +123,14 @@ export class MonacoEditorComponent implements OnDestroy {
           this.editor?.updateOptions({ readOnly: true });
         }
 
-        if (event.code !== 4001) {
+        if (event.code !== 4001 && this.retryCount() >= MAX_RETRIES) {
           this.connectionStatus.set('failed');
           this.connectionError.set(`Connection closed: ${event.reason}`);
+          this.editor?.updateOptions({ readOnly: true });
+        }
+
+        if (event.code !== 4001 && this.retryCount() < MAX_RETRIES) {
+          this.connectionStatus.set('loading');
           this.editor?.updateOptions({ readOnly: true });
         }
       });
