@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, OnDestroy, ViewChild, Input, inject, computed } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, OnDestroy, ViewChild, Input, inject, computed, signal } from '@angular/core';
 import Quill from 'quill';
 import QuillCursors from 'quill-cursors';
 import * as Y from 'yjs';
@@ -34,6 +34,10 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
   readonly userEmail = computed(() => this.auth.user()?.email ?? 'Anon');
   public activeCommentId: string | null = null;
 
+  public connectionStatus = signal<'loading' | 'connected' | 'failed'>('loading');
+  public connectionError = signal<string | null>(null);
+  private retryCount = signal<number>(0);
+
   ngAfterViewInit() {
     this.quill = new Quill(this.host.nativeElement, {
       theme: 'snow',
@@ -51,14 +55,71 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
     this.provider = new WebsocketProvider(
       environment.API_WS_URL,
       this.docId,
-      this.ydoc
+      this.ydoc,
+      {
+        maxBackoffTime: 10000,
+        connect: true,
+        params: { access_token: this.auth.getToken() || '' }
+      }
     );
-
-    this.provider.params = { access_token: this.auth.getToken() || '' };
 
     this.provider.on('sync', (isSynced: boolean) => {
       if (isSynced) {
         this.quill.enable(true);
+      }
+    });
+
+    const MAX_RETRIES = 3;
+    this.provider.on('status', (event: { status: string }) => {
+      if (event.status === 'connecting') {
+        this.connectionStatus.set('loading');
+        this.connectionError.set(null);
+        this.retryCount.set(this.retryCount() + 1);
+
+        if (this.retryCount() >= MAX_RETRIES) {
+          this.provider.disconnect();
+          this.connectionStatus.set('failed');
+          this.connectionError.set('Maximum connection attempts reached, refresh the page to try again');
+        }
+
+        if (this.retryCount() < MAX_RETRIES) {
+          this.connectionStatus.set('loading');
+          this.connectionError.set('Attempting to reconnect... (' + this.retryCount() + '/' + MAX_RETRIES + ')');
+        }
+      }
+
+      if (event.status === 'connected') {
+        this.connectionStatus.set('connected');
+        this.connectionError.set(null);
+        this.retryCount.set(0);
+      }
+
+      if (event.status === 'disconnected') {
+        this.connectionStatus.set('failed');
+        this.connectionError.set('Disconnected');
+      }
+    });
+
+    this.provider.on('connection-close', (event) => {
+      if (!event) return;
+
+      // If unauthorized
+      if (event.code === 4001) {
+        this.provider.disconnect();
+        this.connectionStatus.set('failed');
+        this.connectionError.set('Unauthorized. Try refreshing the page or log in again.');
+        this.quill.enable(false);
+      }
+
+      if (event.code !== 4001 && this.retryCount() >= MAX_RETRIES) {
+        this.connectionStatus.set('failed');
+        this.connectionError.set(`Connection closed: ${event.reason}`);
+        this.quill.enable(false);
+      }
+
+      if (event.code !== 4001 && this.retryCount() < MAX_RETRIES) {
+        this.connectionStatus.set('loading');
+        this.quill.enable(false);
       }
     });
 

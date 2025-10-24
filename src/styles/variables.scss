@@ -47,3 +47,27 @@ $info: #3B82F6;
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+.dot-green {
+  height: 10px;
+  width: 10px;
+  background-color: $success;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-orange {
+  height: 10px;
+  width: 10px;
+  background-color: $warning;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-red {
+  height: 10px;
+  width: 10px;
+  background-color: $error;
+  border-radius: 50%;
+  display: inline-block;
+}

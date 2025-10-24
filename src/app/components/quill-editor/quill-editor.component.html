@@ -1,3 +1,14 @@
+<div>
+  <p>Status:
+  <span
+    [ngClass]="{
+      'dot-green': connectionStatus() === 'connected',
+      'dot-orange': connectionStatus() === 'loading',
+      'dot-red': connectionStatus() === 'failed'}">
+    </span>
+    {{ connectionStatus() }} {{ connectionError() ? `(${connectionError()})` : '' }}
+  </p>
+</div>
 <div class="document-holder">
   <div>
     <div #host class="quill-container"></div>
