@@ -19,6 +19,21 @@
     height: 100%;
 }
 
+::ng-deep .ql-toolbar.ql-snow {
+    * > svg {
+        // color: $text-primary !important;
+        /* Via https://codepen.io/sosuke/pen/Pjoqqp */
+        filter: invert(96%) sepia(6%) saturate(344%) hue-rotate(187deg) brightness(87%) contrast(96%);
+    }
+    * {
+        color: $text-primary;
+    }
+
+    * > .ql-picker-options {
+        background-color: $bg-elevated;
+    }
+}
+
 .comments-holder {
     flex-direction: column;
 }
