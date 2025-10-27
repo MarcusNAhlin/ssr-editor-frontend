@@ -3,13 +3,27 @@
   <div *ngIf="!loading" class="edit-holder">
     <p class="error" *ngIf="error">{{ error }}</p>
 
+    <div *ngIf="document">
+      <div class="doc-header">
+        <span>Title: <b>{{ document.title }}</b></span>
 
-    <form *ngIf="document" #f="ngForm" (ngSubmit)="$event.preventDefault()">
+        <div class="actions">
+          <button type="button" class="icon-btn danger" (click)="deleteDocument()" aria-label="Delete document"
+            title="Delete">
+            <lucide-icon name="Trash" size="18"></lucide-icon>
+          </button>
 
-      <label>
-        Title
-        <input [(ngModel)]="document.title" class="form-field" name="title" placeholder="Document title" />
-      </label>
+          <button type="button" class="icon-btn" (click)="showShare = true" [disabled]="!document._id"
+            aria-label="Share document" title="Share">
+            <lucide-icon name="Share" size="18"></lucide-icon>
+          </button>
+
+          <button *ngIf="document.type === 'code'" type="button" class="icon-btn primary" (click)="runCode()"
+            [disabled]="loading" aria-label="Run code" title="Run">
+            <lucide-icon name="Play" size="18"></lucide-icon>
+          </button>
+        </div>
+      </div>
 
       <ng-container [ngSwitch]="document.type">
         <app-monaco-editor *ngSwitchCase="'code'" [docId]="document._id || 'demo_doc'" #monacoEditor>
@@ -20,16 +34,7 @@
 
         <p *ngSwitchDefault class="muted">Unknown doc type: {{ document.type }}</p>
       </ng-container>
-
-      <div class="actions">
-        <button type="button" (click)="deleteDocument()" class="button delete-button">Delete Document</button>
-        <button class="button" type="button" (click)="showShare = true" [disabled]="!document._id">
-          Share
-        </button>
-        <!-- <button type="submit" [disabled]="loading" class="button-primary save-button">Save</button> -->
-        <button *ngIf="document.type === 'code'" type="button" (click)="runCode()" [disabled]="loading" class="button-primary run-code-button">Run Code</button>
-      </div>
-    </form>
+    </div>
 
     <app-share-doc-dialog [open]="showShare" [doc]="document ?? null" (closed)="showShare = false">
     </app-share-doc-dialog>
