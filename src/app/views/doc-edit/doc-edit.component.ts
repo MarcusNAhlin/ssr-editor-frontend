@@ -93,6 +93,9 @@ export class DocEditComponent implements OnInit {
 
     // Show browser confirm modal
     const confirmedDelete = confirm(`Are you sure you want to delete document "${documentIdentifier}"`);
+    if(!confirmedDelete) {
+      this.loading = false;
+    }
 
     if (confirmedDelete) {
       if (!this.document?._id) {
