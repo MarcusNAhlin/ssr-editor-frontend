@@ -5,11 +5,11 @@ import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@a
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { RefreshInterceptor } from './interceptors/refresh.interceptor';
 import { routes } from './app.routes';
-import { LucideAngularModule, FileText, Users, Plus, FileCode } from 'lucide-angular';
+import { LucideAngularModule, FileText, Users, Plus, FileCode, Trash, Play, Share } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(LucideAngularModule.pick({ FileText, Users, Plus, FileCode })),
+    importProvidersFrom(LucideAngularModule.pick({ FileText, Users, Plus, FileCode, Trash, Play, Share })),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
