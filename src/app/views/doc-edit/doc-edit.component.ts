@@ -8,10 +8,11 @@ import { Document } from '../../types/document';
 import { ShareDocDialogComponent } from '../../components/share-doc-dialog/share-doc-dialog.component';
 import { MonacoEditorComponent } from '../../components/monaco-editor/monaco-editor.component';
 import { QuillEditorComponent } from '../../components/quill-editor/quill-editor.component';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-doc-edit',
-  imports: [CommonModule, FormsModule, ShareDocDialogComponent, MonacoEditorComponent, QuillEditorComponent],
+  imports: [CommonModule, FormsModule, ShareDocDialogComponent, MonacoEditorComponent, QuillEditorComponent, LucideAngularModule],
   templateUrl: './doc-edit.component.html',
   styleUrl: './doc-edit.component.scss'
 })
