@@ -8,7 +8,7 @@
   border: none;
   padding: 0.4rem 1rem;
   font-size: 110%;
-  border-radius: 0.1rem;
+  border-radius: 0.3rem;
   transition: background-color 0.2s ease-in-out;
 
   &:hover {
@@ -31,7 +31,7 @@
   border: none;
   padding: 0.4rem 1rem;
   font-size: 110%;
-  border-radius: 0.1rem;
+  border-radius: 0.3rem;
   transition: background-color 0.2s ease-in-out;
 
   &:hover {
@@ -47,4 +47,26 @@
 
 .button-wide {
   width: 100%;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid $border;
+  border-radius: 8px;
+  background: $highlight;
+  color: $bg-primary;
+  cursor: pointer;
+}
+
+.danger {
+  background-color: $error;
+  &:hover {
+    background-color: $error;
+    cursor: pointer;
+  }
 }
