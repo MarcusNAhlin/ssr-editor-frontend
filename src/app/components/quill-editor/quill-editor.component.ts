@@ -38,12 +38,23 @@ export class QuillEditorComponent implements AfterViewInit, OnDestroy {
   public connectionError = signal<string | null>(null);
   private retryCount = signal<number>(0);
 
+  private toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],
+    ['blockquote', 'code-block'],
+    ['link'],
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+    [{ 'indent': '-1' }, { 'indent': '+1' }],
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'align': [] }],
+    ['clean']
+  ];
+
   ngAfterViewInit() {
     this.quill = new Quill(this.host.nativeElement, {
       theme: 'snow',
       modules: {
-        toolbar: [['bold', 'italic', 'underline'],
-          [{ header: [1,2,false] }], ['link', 'code-block']],
+        toolbar: this.toolbarOptions,
         cursors: true,
         history: { userOnly: true }
       },
